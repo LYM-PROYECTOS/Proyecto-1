@@ -55,24 +55,53 @@ SKIP:
 	|	"\t"
 	| "\n"
 }
-
-TOKEN: /* Nombres de Comandos */
-{
-
-			<MOV:  "Mov">
-		| 	<RIGHT: "RIGHT">
-		| 	<PUT: "Put">
-		| 	<PICK: "Pick">
+TOKEN: /* COMANDOS */
+{		   <DEFVAR: "defVar" >
+		|  <DEFPROC: "defProc" >
+}
+TOKEN: /* COMANDOS */
+{	
+		   <MOVE:  "move">
+		|  <RIGHT: "right">
+		|  <PUT: "Put">
+		|  <PICK: "Pick">
 		|  < POP: "Pop" >
-		|  <GO: "GO" >
-        |  < HOP:  "HOP" >		
-
+		|  < HOP:  "Hop" >	
+		|  <GO: "Go" >
+		|  <WALK: "walk" >
+		|  <LEAP: "leap" >
+		|  <TURN: "turn" >
+		|  <TURNTO: "turnto" >
+		|  <DROP: "drop" >
+		|  <GET: "get" >
+		|  <GRAB: "grab" >
+		|  <LETGO: "letGo" >
+		|  <NOP: "nop" >
+}
+TOKEN: /* ESTRUCTURAS */
+{
+		   <IF: "if" >
+		|  <ELSE: "else" >
+		|  <WHILE: "while" >
+		|  <REPEAT: "repeat" >
+		|  <TIMES: "times" >
+}
+TOKEN: /* condicion */
+{
+		   <FACING: "facing" >
+		|  <CAN: "can" >
+		|  <NOT: "not" >
+		
 }
 
-TOKEN:
+
+TOKEN:  /* AUXILIARES*/
 {
-		<BALLOONS:  "BALLOONS" >
-		|	<CHIPS:     "CHIPS"  >	
+		   <BALLOONS:  "balloons" >
+		|  <CHIPS:     "chips"  >
+		|  <idname : (["A"-"Z"] | ["a"-"z"])+ >
+		|  <NUM: (["0"-"9"])+ >
+		|  <: "" >
 
 }
 
@@ -80,8 +109,8 @@ TOKEN:
 
 TOKEN :
 {
-		<NUM: (<DIGIT>)+ >
-		|  	<#DIGIT: ["0"-"9"] >
+		<NUM: (["0"-"9"])+ >
+		
         
 }
 
@@ -98,13 +127,15 @@ TOKEN :
 	
 	{
 		(		  (
-		   <RIGHT> "(" ")" {world.turnRight();salida = "Command: Turnright";}
-		| 	<MOV>  "(" x=num() ")" {world.moveForward(x,false);salida = "Command: Moveforward ";}  
-		| 	<HOP>  "(" x=num() ")" {world.moveForward(x,true);salida = "Command:Jumpforward ";}
-		| 	<GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);salida = "Command:GO ";}  
-		|  <PUT> "("  put() ")"					  			
-		|  <PICK> "(" get()  ")"	
-	    |  < POP > "(" x=num() ")" {world.popBalloons(x); salida = "Comando:  Pop";}
+		   <MOVE>  "(" x=num() ")" {world.moveForward(x,false);salida = "Command: Moveforward ";}  
+		|  <RIGHT> "(" ")" {world.turnRight();salida = "Command: Turnright";} 
+		|  <PUT> "("  put() ")"
+		|  <PICK> "(" get()  ")"
+		|  <POP> "(" x=num() ")" {world.popBalloons(x); salida = "Comando:  Pop";}
+		|  <HOP>  "(" x=num() ")" {world.moveForward(x,true);salida = "Command:Jumpforward ";}
+		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);salida = "Command:GO ";}  				  				
+	    |  <idname > "=" x=num() { ;salida = "Command:Assignar ";}
+	    | <WALK> "(" walk()  ")" 
 		) ";" 
 
 		{
@@ -140,7 +171,15 @@ TOKEN :
 		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
 
 	}
-
+	void walk():
+	{
+	  int f=1;
+	  int f1=0;
+	}
+	{
+			f=num() { ;salida = "Command:Walk ";}
+		|	f=num()"," f1=direction() { ;salida = "Command:Walk ";}
+	}
 	
 	
 
@@ -149,7 +188,11 @@ TOKEN :
 	 * @return the corresponding value of the string
 	 * @error  corresponding value is too large
 	 */
-
+	int direction() throws Error:
+	{
+	}
+	{
+	}
 	int num() throws Error:
 	{	
 		int total=1;
@@ -168,5 +211,4 @@ TOKEN :
 			return total;
 		}
 	}
-
 	
