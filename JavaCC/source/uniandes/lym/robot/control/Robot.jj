@@ -105,12 +105,8 @@ TOKEN:  /* AUXILIARES*/
 		|  <RIGHT: "right" >
 		|  <LEFT: "left" >
 		|  <BACK: "back" >
-		|  <: "" >
-		|  <: "" >
-		|  <: "" >
-		|  <: "" >
-		|  <: "" >
-		|  <: "" >
+		|  <AROUND: "around">
+		
 
 }
 
@@ -125,22 +121,33 @@ TOKEN:  /* AUXILIARES*/
 	
 	{
 		(		  (
-		   <MOVE>  "(" x=num() ")" {world.moveForward(x,false);salida = "Command: Moveforward ";}  
-		|  <RIGHT> "(" ")" {world.turnRight();salida = "Command: Turnright";} 
+		   <MOVE>  "(" x=num() ")" {world.moveForward(x,false);
+		   							salida = "Command: Moveforward ";}  
+		|  <RIGHT> "(" ")" {world.turnRight();
+							salida = "Command: Turnright";} 
 		|  <PUT> "("  put() ")"
 		|  <PICK> "(" get()  ")"
-		|  <POP> "(" x=num() ")" {world.popBalloons(x); salida = "Comando:  Pop";}
-		|  <HOP>  "(" x=num() ")" {world.moveForward(x,true);salida = "Command:Hopforward ";}
-		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);salida = "Command:GO ";}  				  				
-	    |  <idname > "=" x=num() { ;salida = "Command:Assignar ";}
+		|  <POP> "(" x=num() ")" {world.popBalloons(x);
+								 salida = "Comando:  Pop";}
+		|  <HOP>  "(" x=num() ")" {world.moveForward(x,true);
+									salida = "Command:Hopforward ";}
+		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);
+								salida = "Command:GO ";}  				  				
+	    |  <idname > "=" x=num() {salida = "Command:Assignar ";}
+	    | <JUMP> "(" x=num() "," y=num()")" {world.setPostion(x,y);
+								salida = "Command: JUMP ";}  
 	    | <WALK> "(" Verifywalk()  ")"
 	    | < LEAP> "(" VerifyLeap() ")"
 	    | < TURN > "(" VerifyTurn() ")"
 	    | < TURNTO>
-	    | < DROP>
-	    | < GET>
-	    | < GRAB>
-	    | < LETGO> "(" x=num() ")" {world.putBalloons(x);salida = "Command:letGo ";}
+	    | < DROP> "(" x=num() ")" {world.pickChips(x);
+	    							salida = "Command:Grab ";}
+	    | < GET> "(" x=num() ")" {world.pickChips(x);
+	    							salida = "Command:Grab ";}
+	    | < GRAB>"(" x=num() ")" {world.grabBalloons(x);
+	    							salida = "Command:Grab ";}
+	    | < LETGO> "(" x=num() ")" {world.putBalloons(x);
+	    							salida = "Command:letGo ";}
 	    | < NOP> "(" ")" {salida = "Command:Nop ";}
 	    
 		) ";" 
@@ -188,21 +195,44 @@ TOKEN:  /* AUXILIARES*/
 	}
 	{
 	}
+	void VerifyTurn()
+	{
+	  
+	}
+	{
+	  		(< RIGHT> {world.turnRight();
+	  					salida = "Command : TURN RIGHT";})
+		| 	(<LEFT> {world.turnRight();
+					world.turnRight();
+					world.turnRight();
+					salida = "Command : TURN LEFT";})
+		| 	(<AROUND> {world.turnRight();
+						world.turnRight();
+						salida = "Command : TURN AROUND";})
+	}
 	void Verifywalk():
 	{
 	  int steps=1;
 	}
 	{
-			(steps = num() { world.moveForward(steps,false); salida = "Command : move";})
-		|	(steps = num()","<FRONT> { world.moveForward(steps,false); salida = "Command : moveFRONT";})
-		| 	(steps = num()","<RIGHT> {world.turnRight(); world.moveForward(steps,false); salida = "Command : moveFRONT";})
-		| 	(steps = num()","<LEFT> {world.turnRight();world.turnRight();world.turnRight();world.moveForward(steps,false); salida = "Command : moveLEFT";})
-		| 	(steps = num()","<BACK> {world.turnRight();world.turnRight();world.moveForward(steps,false); salida = "Command : moveLEFT";})
-		
+			(steps = num() { world.moveForward(steps,false);
+							 salida = "Command : move";})
+		|	(steps = num()","<FRONT> { world.moveForward(steps,false);
+									salida = "Command : moveFRONT";})
+		| 	(steps = num()","<RIGHT> {world.turnRight();
+										world.moveForward(steps,false);
+										salida = "Command : moveFRONT";})
+		| 	(steps = num()","<LEFT> {world.turnRight();
+									world.turnRight();
+									world.turnRight();
+									world.moveForward(steps,false);
+									 salida = "Command : moveLEFT";})
+		| 	(steps = num()","<BACK> {world.turnRight();
+									world.turnRight();
+									world.moveForward(steps,false);
+									salida = "Command : moveLEFT";})
 	}
 	
-	
-
 	/**
 	 * Unsigned decimal number
 	 * @return the corresponding value of the string
