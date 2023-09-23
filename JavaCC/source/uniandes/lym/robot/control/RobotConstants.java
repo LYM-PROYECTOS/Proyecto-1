@@ -11,27 +11,83 @@ public interface RobotConstants {
   /** End of File. */
   int EOF = 0;
   /** RegularExpression Id. */
-  int MOV = 5;
+  int DEFVAR = 5;
   /** RegularExpression Id. */
-  int RIGHT = 6;
+  int DEFPROC = 6;
   /** RegularExpression Id. */
-  int PUT = 7;
+  int MOVE = 7;
   /** RegularExpression Id. */
-  int PICK = 8;
+  int PUT = 8;
   /** RegularExpression Id. */
-  int POP = 9;
+  int PICK = 9;
   /** RegularExpression Id. */
-  int GO = 10;
+  int POP = 10;
   /** RegularExpression Id. */
   int HOP = 11;
   /** RegularExpression Id. */
-  int BALLOONS = 12;
+  int GO = 12;
   /** RegularExpression Id. */
-  int CHIPS = 13;
+  int WALK = 13;
   /** RegularExpression Id. */
-  int NUM = 14;
+  int JUMP = 14;
   /** RegularExpression Id. */
-  int DIGIT = 15;
+  int LEAP = 15;
+  /** RegularExpression Id. */
+  int TURN = 16;
+  /** RegularExpression Id. */
+  int TURNTO = 17;
+  /** RegularExpression Id. */
+  int DROP = 18;
+  /** RegularExpression Id. */
+  int GET = 19;
+  /** RegularExpression Id. */
+  int GRAB = 20;
+  /** RegularExpression Id. */
+  int LETGO = 21;
+  /** RegularExpression Id. */
+  int NOP = 22;
+  /** RegularExpression Id. */
+  int IF = 23;
+  /** RegularExpression Id. */
+  int ELSE = 24;
+  /** RegularExpression Id. */
+  int WHILE = 25;
+  /** RegularExpression Id. */
+  int REPEAT = 26;
+  /** RegularExpression Id. */
+  int TIMES = 27;
+  /** RegularExpression Id. */
+  int FACING = 28;
+  /** RegularExpression Id. */
+  int CAN = 29;
+  /** RegularExpression Id. */
+  int NOT = 30;
+  /** RegularExpression Id. */
+  int BALLOONS = 31;
+  /** RegularExpression Id. */
+  int CHIPS = 32;
+  /** RegularExpression Id. */
+  int idname = 33;
+  /** RegularExpression Id. */
+  int NUM = 34;
+  /** RegularExpression Id. */
+  int FRONT = 35;
+  /** RegularExpression Id. */
+  int RIGHT = 36;
+  /** RegularExpression Id. */
+  int LEFT = 37;
+  /** RegularExpression Id. */
+  int BACK = 38;
+  /** RegularExpression Id. */
+  int AROUND = 39;
+  /** RegularExpression Id. */
+  int NORTH = 40;
+  /** RegularExpression Id. */
+  int SOUTH = 41;
+  /** RegularExpression Id. */
+  int WEST = 42;
+  /** RegularExpression Id. */
+  int EAST = 43;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -43,20 +99,49 @@ public interface RobotConstants {
     "\"\\r\"",
     "\"\\t\"",
     "\"\\n\"",
-    "\"Mov\"",
-    "\"RIGHT\"",
+    "\"defVar\"",
+    "\"defProc\"",
+    "\"move\"",
     "\"Put\"",
     "\"Pick\"",
     "\"Pop\"",
-    "\"GO\"",
-    "\"HOP\"",
-    "\"BALLOONS\"",
-    "\"CHIPS\"",
+    "\"Hop\"",
+    "\"Go\"",
+    "\"walk\"",
+    "\"jump\"",
+    "\"leap\"",
+    "\"turn\"",
+    "\"turnto\"",
+    "\"drop\"",
+    "\"get\"",
+    "\"grab\"",
+    "\"letGo\"",
+    "\"nop\"",
+    "\"if\"",
+    "\"else\"",
+    "\"while\"",
+    "\"repeat\"",
+    "\"times\"",
+    "\"facing\"",
+    "\"can\"",
+    "\"not\"",
+    "\"balloons\"",
+    "\"chips\"",
+    "<idname>",
     "<NUM>",
-    "<DIGIT>",
+    "\"front\"",
+    "\"right\"",
+    "\"left\"",
+    "\"back\"",
+    "\"around\"",
+    "\"north\"",
+    "\"south\"",
+    "\"west\"",
+    "\"east\"",
     "\"(\"",
     "\")\"",
     "\",\"",
+    "\"=\"",
     "\";\"",
   };
 

@@ -62,13 +62,13 @@ TOKEN: /* COMANDOS */
 TOKEN: /* COMANDOS */
 {	
 		   <MOVE:  "move">
-		|  <RIGHT: "right">
 		|  <PUT: "Put">
 		|  <PICK: "Pick">
 		|  < POP: "Pop" >
 		|  < HOP:  "Hop" >	
 		|  <GO: "Go" >
 		|  <WALK: "walk" >
+		| < JUMP :"jump">
 		|  <LEAP: "leap" >
 		|  <TURN: "turn" >
 		|  <TURNTO: "turnto" >
@@ -106,8 +106,10 @@ TOKEN:  /* AUXILIARES*/
 		|  <LEFT: "left" >
 		|  <BACK: "back" >
 		|  <AROUND: "around">
-		
-
+		| < NORTH: "north">
+		| < SOUTH: "south">
+		| < WEST: "west">
+		| < EAST: "east">
 }
 
 	//boolean command(uniandes.lym.robot.view.Console sistema) :
@@ -123,8 +125,6 @@ TOKEN:  /* AUXILIARES*/
 		(		  (
 		   <MOVE>  "(" x=num() ")" {world.moveForward(x,false);
 		   							salida = "Command: Moveforward ";}  
-		|  <RIGHT> "(" ")" {world.turnRight();
-							salida = "Command: Turnright";} 
 		|  <PUT> "("  put() ")"
 		|  <PICK> "(" get()  ")"
 		|  <POP> "(" x=num() ")" {world.popBalloons(x);
@@ -133,9 +133,9 @@ TOKEN:  /* AUXILIARES*/
 									salida = "Command:Hopforward ";}
 		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);
 								salida = "Command:GO ";}  				  				
-	    |  <idname > "=" x=num() {salida = "Command:Assignar ";}
-	    | <JUMP> "(" x=num() "," y=num()")" {world.setPostion(x,y);
-								salida = "Command: JUMP ";}  
+	    |  <idname > "=" x=num() { ;salida = "Command:Assignar ";}
+	    | <JUMP > "(" x=num() "," y=num()")" {world.popBalloons(x);
+								 salida = "Comando:  Pop";}
 	    | <WALK> "(" Verifywalk()  ")"
 	    | < LEAP> "(" VerifyLeap() ")"
 	    | < TURN > "(" VerifyTurn() ")"
@@ -158,7 +158,6 @@ TOKEN:  /* AUXILIARES*/
 	    	    } catch (InterruptedException e) {
 	    			        System.err.format("IOException: %s%n", e);
 	    		    }
-	    			 
 			sistema.printOutput(salida);
 			return true;
 		})+
@@ -185,19 +184,49 @@ TOKEN:  /* AUXILIARES*/
 		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
 
 	}
-	void VerifyLeap()
+	void VerifyLeap():
 	{
+	  	int steps=1;
 	}
-	{
+	{		(steps = num() { world.moveForward(steps,false);
+							 salida = "Command : leap S";})
+		|	(steps = num()","<FRONT> { world.moveForward(steps,false);
+									salida = "Command : leap front";})
+		| 	(steps = num()","<RIGHT> {world.turnRight();
+										world.moveForward(steps,false);
+										world.turnRight();
+										world.turnRight();
+										world.turnRight();
+										salida = "Command : leap right";})
+		| 	(steps = num()","<LEFT> {world.turnRight();
+									world.turnRight();
+									world.turnRight();
+									world.moveForward(steps,false);
+									world.turnRight();
+									 salida = "Command : leap left";})
+		| 	(steps = num()","<BACK> {world.turnRight();
+									world.turnRight();
+									world.moveForward(steps,false);
+									world.turnRight();
+									world.turnRight();
+									salida = "Command : leap back";})
+		| 	(steps = num()","<NORTH> {direction(0);
+										world.moveForward(steps,false);
+										salida = "Command : leap north";})
+		| 	(steps = num()","<SOUTH> {direction(1);
+										world.moveForward(steps,false);
+										salida = "Command : leap south";})
+		| 	(steps = num()","<EAST> {direction(2);
+										world.moveForward(steps,false);
+										salida = "Command : leap EAST";})
+		| 	(steps = num()","<WEST> {direction(3);
+										world.moveForward(steps,false);
+										salida = "Command : leap WEST";})		
+
 	}
-	void VerifyLeap()
+	
+	void VerifyTurn():
 	{
-	}
-	{
-	}
-	void VerifyTurn()
-	{
-	  
 	}
 	{
 	  		(< RIGHT> {world.turnRight();
@@ -255,5 +284,15 @@ TOKEN:  /* AUXILIARES*/
 			}
 			return total;
 		}
+	}
+	void direction_leap(int Orien):
+	{
+	int contador = 0;
+	while (Orien!= world.getfacing() && contador <= 6) { 
+	  world.turnRight();
+	  contador ++;
+	  }
+	}
+	{
 	}
 	
