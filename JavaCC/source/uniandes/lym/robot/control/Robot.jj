@@ -36,7 +36,7 @@ import java.util.LinkedList;
 public class Robot 
 {
 
-
+	private HashMap<String, Integer> VAR = new HashMap<String, Integer>();
 	private RobotWorldDec world;
 	
 	
@@ -101,20 +101,18 @@ TOKEN:  /* AUXILIARES*/
 		|  <CHIPS:     "chips"  >
 		|  <idname : (["A"-"Z"] | ["a"-"z"])+ >
 		|  <NUM: (["0"-"9"])+ >
+		|  <FRONT: "front" >
+		|  <RIGHT: "right" >
+		|  <LEFT: "left" >
+		|  <BACK: "back" >
+		|  <: "" >
+		|  <: "" >
+		|  <: "" >
+		|  <: "" >
+		|  <: "" >
 		|  <: "" >
 
 }
-
-
-
-TOKEN :
-{
-		<NUM: (["0"-"9"])+ >
-		
-        
-}
-
-
 
 	//boolean command(uniandes.lym.robot.view.Console sistema) :
 	boolean command(Console sistema):
@@ -132,10 +130,19 @@ TOKEN :
 		|  <PUT> "("  put() ")"
 		|  <PICK> "(" get()  ")"
 		|  <POP> "(" x=num() ")" {world.popBalloons(x); salida = "Comando:  Pop";}
-		|  <HOP>  "(" x=num() ")" {world.moveForward(x,true);salida = "Command:Jumpforward ";}
+		|  <HOP>  "(" x=num() ")" {world.moveForward(x,true);salida = "Command:Hopforward ";}
 		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);salida = "Command:GO ";}  				  				
 	    |  <idname > "=" x=num() { ;salida = "Command:Assignar ";}
-	    | <WALK> "(" walk()  ")" 
+	    | <WALK> "(" Verifywalk()  ")"
+	    | < LEAP> "(" VerifyLeap() ")"
+	    | < TURN > "(" VerifyTurn() ")"
+	    | < TURNTO>
+	    | < DROP>
+	    | < GET>
+	    | < GRAB>
+	    | < LETGO> "(" x=num() ")" {world.putBalloons(x);salida = "Command:letGo ";}
+	    | < NOP> "(" ")" {salida = "Command:Nop ";}
+	    
 		) ";" 
 
 		{
@@ -171,14 +178,27 @@ TOKEN :
 		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
 
 	}
-	void walk():
+	void VerifyLeap()
 	{
-	  int f=1;
-	  int f1=0;
 	}
 	{
-			f=num() { ;salida = "Command:Walk ";}
-		|	f=num()"," f1=direction() { ;salida = "Command:Walk ";}
+	}
+	void VerifyLeap()
+	{
+	}
+	{
+	}
+	void Verifywalk():
+	{
+	  int steps=1;
+	}
+	{
+			(steps = num() { world.moveForward(steps,false); salida = "Command : move";})
+		|	(steps = num()","<FRONT> { world.moveForward(steps,false); salida = "Command : moveFRONT";})
+		| 	(steps = num()","<RIGHT> {world.turnRight(); world.moveForward(steps,false); salida = "Command : moveFRONT";})
+		| 	(steps = num()","<LEFT> {world.turnRight();world.turnRight();world.turnRight();world.moveForward(steps,false); salida = "Command : moveLEFT";})
+		| 	(steps = num()","<BACK> {world.turnRight();world.turnRight();world.moveForward(steps,false); salida = "Command : moveLEFT";})
+		
 	}
 	
 	
@@ -188,11 +208,6 @@ TOKEN :
 	 * @return the corresponding value of the string
 	 * @error  corresponding value is too large
 	 */
-	int direction() throws Error:
-	{
-	}
-	{
-	}
 	int num() throws Error:
 	{	
 		int total=1;
