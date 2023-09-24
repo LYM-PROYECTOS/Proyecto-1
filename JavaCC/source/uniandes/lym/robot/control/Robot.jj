@@ -37,6 +37,7 @@ public class Robot
 {
 
 	private HashMap<String, Integer> VAR = new HashMap<String, Integer>();
+	private HashMap<String, Integer> PROC = new HashMap<String, Integer>();
 	private RobotWorldDec world;
 	
 	
@@ -112,10 +113,66 @@ TOKEN:  /* AUXILIARES*/
 		| < EAST: "east">
 }
 
+	boolean defvar(Console sistema):
+	{	
+		String nameid;
+		int x;
+		salida=new String();	
+	}
+
+	
+	{
+		(
+		  (
+		   <DEFVAR> nameid = <idname > x=num() { VAR.put(nameid, x);salida = "Command: def var ";}	    
+		) 
+
+		{
+		    try {
+	    			 Thread.sleep(900);
+	    	    } catch (InterruptedException e) {
+	    			        System.err.format("IOException: %s%n", e);
+	    		    }
+			sistema.printOutput(salida);
+			return true;
+		})+
+
+    	| <EOF> {return false;} 
+	}
+	
+	boolean defproc(Console sistema):
+	{	
+		String nameid;
+		int x;
+		salida=new String();	
+	}
+
+	
+	{
+		(
+		  (
+		   <DEFPROC> nameid = <idname > "(" x=parametrosPro()")" { VAR.put(nameid, x);salida = "Command: def proc ";}	    
+		) 
+
+		{
+		    try {
+	    			 Thread.sleep(900);
+	    	    } catch (InterruptedException e) {
+	    			        System.err.format("IOException: %s%n", e);
+	    		    }
+			sistema.printOutput(salida);
+			return true;
+		})+
+
+    	| <EOF> {return false;} 
+	}
+
+	
 	//boolean command(uniandes.lym.robot.view.Console sistema) :
+	
 	boolean command(Console sistema):
 	{	
-		
+		String nameid;
 		int x,y;
 		salida=new String();	
 	}
@@ -133,7 +190,7 @@ TOKEN:  /* AUXILIARES*/
 									salida = "Command:Hopforward ";}
 		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);
 								salida = "Command:GO ";}  				  				
-	    |  <idname > "=" x=num() { ;salida = "Command:Assignar ";}
+	    |  nameid = <idname > "=" x=num() { VAR.put(nameid, x);salida = "Command:Assignar ";}
 	    | <JUMP > "(" x=num() "," y=num()")" {world.popBalloons(x);
 								 salida = "Comando:  Pop";}
 	    | <WALK> "(" Verifywalk()  ")"
@@ -311,6 +368,31 @@ TOKEN:  /* AUXILIARES*/
 			return total;
 		}
 	}
+	int parametrosPro():
+	{	
+		int contador = 0;
+		int x;	
+	}	
+	{
+		(
+		  (<idname >{contador ++;}
+	    | x=num(){contador ++;}
+		) "," 
+
+		{
+		    try {
+	    			 Thread.sleep(900);
+	    	    } catch (InterruptedException e) {
+	    			        System.err.format("IOException: %s%n", e);
+	    		    }
+			return contador;
+		})+
+		| <EOF> {return -1;} 
+	}
+
+
+
+		
 	void direction_leap(int Orien):
 	{
 	int contador = 0;
