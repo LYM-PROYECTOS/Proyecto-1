@@ -139,7 +139,7 @@ TOKEN:  /* AUXILIARES*/
 	    | <WALK> "(" Verifywalk()  ")"
 	    | < LEAP> "(" VerifyLeap() ")"
 	    | < TURN > "(" VerifyTurn() ")"
-	    | < TURNTO>
+	    | < TURNTO>  "(" VerifyTurnTo() ")"
 	    | < DROP> "(" x=num() ")" {world.pickChips(x);
 	    							salida = "Command:Grab ";}
 	    | < GET> "(" x=num() ")" {world.pickChips(x);
@@ -239,6 +239,20 @@ TOKEN:  /* AUXILIARES*/
 						world.turnRight();
 						salida = "Command : TURN AROUND";})
 	}
+	void  VerifyTurnTo():
+	{
+	}
+	{
+	  		(<NORTH> {direction(0);
+					salida = "Command : TurnTo north";})
+		| 	(<SOUTH> {direction(1);
+					salida = "Command : TurnTo south";})
+		| 	(<EAST> {direction(2);
+					salida = "Command : TurnTo EAST";})
+		| 	(<WEST> {direction(3);
+					salida = "Command : TurnTo WEST";})
+	}
+	
 	void Verifywalk():
 	{
 	  int steps=1;
@@ -260,6 +274,18 @@ TOKEN:  /* AUXILIARES*/
 									world.turnRight();
 									world.moveForward(steps,false);
 									salida = "Command : moveLEFT";})
+		| 	(steps = num()","<NORTH> {direction(0);
+										world.moveForward(steps,false);
+										salida = "Command : leap north";})
+		| 	(steps = num()","<SOUTH> {direction(1);
+										world.moveForward(steps,false);
+										salida = "Command : leap south";})
+		| 	(steps = num()","<EAST> {direction(2);
+										world.moveForward(steps,false);
+										salida = "Command : leap EAST";})
+		| 	(steps = num()","<WEST> {direction(3);
+										world.moveForward(steps,false);
+										salida = "Command : leap WEST";})	
 	}
 	
 	/**
@@ -293,6 +319,5 @@ TOKEN:  /* AUXILIARES*/
 	  contador ++;
 	  }
 	}
-	{
-	}
+	{ }
 	

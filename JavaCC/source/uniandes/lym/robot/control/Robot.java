@@ -340,6 +340,30 @@ direction(0);
                                                                                 world.moveForward(steps,false);
                                                                                 salida = "Command : leap north";
       break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(SOUTH);
+direction(1);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap south";
+      break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(EAST);
+direction(2);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap EAST";
+      break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(WEST);
+direction(3);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap WEST";
+      break;
       }
     default:
       jj_la1[5] = jj_gen;
