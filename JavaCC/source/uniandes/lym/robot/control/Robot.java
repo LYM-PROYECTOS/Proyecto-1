@@ -14,6 +14,7 @@ import java.util.LinkedList;
 public class Robot implements RobotConstants {
 
         private HashMap<String, Integer> VAR = new HashMap<String, Integer>();
+        private HashMap<String, Integer> PROC = new HashMap<String, Integer>();
         private RobotWorldDec world;
 
 
@@ -23,8 +24,98 @@ public class Robot implements RobotConstants {
 
         String salida=new String();
 
+  final public boolean defvar(Console sistema) throws ParseException {String nameid;
+                int x;
+                salida=new String();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case DEFVAR:{
+      label_1:
+      while (true) {
+        jj_consume_token(DEFVAR);
+        nameid = jj_consume_token(idname);
+        x = num();
+VAR.put(nameid, x);salida = "Command: def var ";
+try {
+                                 Thread.sleep(900);
+                    } catch (InterruptedException e) {
+                                        System.err.format("IOException: %s%n", e);
+                            }
+                        sistema.printOutput(salida);
+                        {if ("" != null) return true;}
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case DEFVAR:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[0] = jj_gen;
+          break label_1;
+        }
+      }
+      break;
+      }
+    case 0:{
+      jj_consume_token(0);
+{if ("" != null) return false;}
+      break;
+      }
+    default:
+      jj_la1[1] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+}
+
+  final public boolean defproc(Console sistema) throws ParseException {String nameid;
+                int x;
+                salida=new String();
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case DEFPROC:{
+      label_2:
+      while (true) {
+        jj_consume_token(DEFPROC);
+        nameid = jj_consume_token(idname);
+        jj_consume_token(44);
+        x = parametrosPro();
+        jj_consume_token(45);
+VAR.put(nameid, x);salida = "Command: def proc ";
+try {
+                                 Thread.sleep(900);
+                    } catch (InterruptedException e) {
+                                        System.err.format("IOException: %s%n", e);
+                            }
+                        sistema.printOutput(salida);
+                        {if ("" != null) return true;}
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case DEFPROC:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[2] = jj_gen;
+          break label_2;
+        }
+      }
+      break;
+      }
+    case 0:{
+      jj_consume_token(0);
+{if ("" != null) return false;}
+      break;
+      }
+    default:
+      jj_la1[3] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+}
+
 //boolean command(uniandes.lym.robot.view.Console sistema) :
-  final public         boolean command(Console sistema) throws ParseException {int x,y;
+  final public 
+        boolean command(Console sistema) throws ParseException {String nameid;
+                int x,y;
                 salida=new String();
     switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
     case MOVE:
@@ -44,7 +135,7 @@ public class Robot implements RobotConstants {
     case LETGO:
     case NOP:
     case idname:{
-      label_1:
+      label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
         case MOVE:{
@@ -100,10 +191,10 @@ world.setPostion(x,y);
           break;
           }
         case idname:{
-          jj_consume_token(idname);
+          nameid = jj_consume_token(idname);
           jj_consume_token(47);
           x = num();
-;salida = "Command:Assignar ";
+VAR.put(nameid, x);salida = "Command:Assignar ";
           break;
           }
         case JUMP:{
@@ -140,6 +231,9 @@ world.popBalloons(x);
           }
         case TURNTO:{
           jj_consume_token(TURNTO);
+          jj_consume_token(44);
+          VerifyTurnTo();
+          jj_consume_token(45);
           break;
           }
         case DROP:{
@@ -186,7 +280,7 @@ salida = "Command:Nop ";
           break;
           }
         default:
-          jj_la1[0] = jj_gen;
+          jj_la1[4] = jj_gen;
           jj_consume_token(-1);
           throw new ParseException();
         }
@@ -220,8 +314,8 @@ try {
           break;
           }
         default:
-          jj_la1[1] = jj_gen;
-          break label_1;
+          jj_la1[5] = jj_gen;
+          break label_3;
         }
       }
       break;
@@ -232,7 +326,7 @@ try {
       break;
       }
     default:
-      jj_la1[2] = jj_gen;
+      jj_la1[6] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -256,7 +350,7 @@ world.putBalloons(f); salida = "Command:  Put Balloons";
       break;
       }
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[7] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -279,7 +373,7 @@ world.grabBalloons(f);salida="Command:  Pick balloons";
       break;
       }
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[8] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -366,7 +460,7 @@ direction(3);
       break;
       }
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -396,7 +490,40 @@ world.turnRight();
       break;
       }
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[10] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+}
+
+  final public void VerifyTurnTo() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case NORTH:{
+      jj_consume_token(NORTH);
+direction(0);
+                                        salida = "Command : TurnTo north";
+      break;
+      }
+    case SOUTH:{
+      jj_consume_token(SOUTH);
+direction(1);
+                                        salida = "Command : TurnTo south";
+      break;
+      }
+    case EAST:{
+      jj_consume_token(EAST);
+direction(2);
+                                        salida = "Command : TurnTo EAST";
+      break;
+      }
+    case WEST:{
+      jj_consume_token(WEST);
+direction(3);
+                                        salida = "Command : TurnTo WEST";
+      break;
+      }
+    default:
+      jj_la1[11] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -443,9 +570,41 @@ world.turnRight();
                                                                         world.moveForward(steps,false);
                                                                         salida = "Command : moveLEFT";
       break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(NORTH);
+direction(0);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap north";
+      break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(SOUTH);
+direction(1);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap south";
+      break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(EAST);
+direction(2);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap EAST";
+      break;
+      }{
+      steps = num();
+      jj_consume_token(46);
+      jj_consume_token(WEST);
+direction(3);
+                                                                                world.moveForward(steps,false);
+                                                                                salida = "Command : leap WEST";
+      break;
       }
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[12] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -470,6 +629,62 @@ try
     throw new Error("Missing return statement in function");
 }
 
+  final public int parametrosPro() throws ParseException {int contador = 0;
+                int x;
+    switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+    case idname:
+    case NUM:{
+      label_4:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case idname:{
+          jj_consume_token(idname);
+contador ++;
+          break;
+          }
+        case NUM:{
+          x = num();
+contador ++;
+          break;
+          }
+        default:
+          jj_la1[13] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+        jj_consume_token(46);
+try {
+                                 Thread.sleep(900);
+                    } catch (InterruptedException e) {
+                                        System.err.format("IOException: %s%n", e);
+                            }
+                        {if ("" != null) return contador;}
+        switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
+        case idname:
+        case NUM:{
+          ;
+          break;
+          }
+        default:
+          jj_la1[14] = jj_gen;
+          break label_4;
+        }
+      }
+      break;
+      }
+    case 0:{
+      jj_consume_token(0);
+{if ("" != null) return -1;}
+      break;
+      }
+    default:
+      jj_la1[15] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+}
+
   /** Generated Token Manager. */
   public RobotTokenManager token_source;
   SimpleCharStream jj_input_stream;
@@ -479,7 +694,7 @@ try
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[8];
+  final private int[] jj_la1 = new int[16];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -487,10 +702,10 @@ try
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x7fff80,0x7fff80,0x7fff81,0x80000000,0x80000000,0x0,0x0,0x0,};
+	   jj_la1_0 = new int[] {0x20,0x21,0x40,0x41,0x7fff80,0x7fff80,0x7fff81,0x80000000,0x80000000,0x0,0x0,0x0,0x0,0x0,0x0,0x1,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x2,0x2,0x2,0x1,0x1,0x4,0xb0,0x4,};
+	   jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x2,0x2,0x2,0x1,0x1,0x4,0xb0,0xf00,0x4,0x6,0x6,0x6,};
 	}
 
   /** Constructor with InputStream. */
@@ -504,7 +719,7 @@ try
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -518,7 +733,7 @@ try
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -528,7 +743,7 @@ try
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -546,7 +761,7 @@ try
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -555,7 +770,7 @@ try
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -564,7 +779,7 @@ try
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 8; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 16; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -620,7 +835,7 @@ try
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 8; i++) {
+	 for (int i = 0; i < 16; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {
