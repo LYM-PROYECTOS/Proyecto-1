@@ -3,10 +3,12 @@
 package uniandes.lym.robot.control;
 import uniandes.lym.robot.kernel.*;
 import uniandes.lym.robot.view.Console;
+import java.util.*;
 import java.awt.Point;
 import java.io.*;
 import java.util.Vector;
 import java.util.LinkedList;
+import java.util.HashMap;
 
 /** Token Manager. */
 @SuppressWarnings ("unused")

@@ -26,11 +26,12 @@ package uniandes.lym.robot.control;
 
 import uniandes.lym.robot.kernel.*;
 import uniandes.lym.robot.view.Console;
- 
+import java.util.*;
 import java.awt.Point;
 import java.io.*;
 import java.util.Vector;
 import java.util.LinkedList;
+import java.util.HashMap;
 
 @SuppressWarnings("serial")
 public class Robot 
@@ -56,7 +57,7 @@ SKIP:
 	|	"\t"
 	| "\n"
 }
-TOKEN: /* COMANDOS */
+TOKEN: /* PROCESOS */
 {		   <DEFVAR: "defVar" >
 		|  <DEFPROC: "defProc" >
 }
@@ -151,7 +152,7 @@ TOKEN:  /* AUXILIARES*/
 	{
 		(
 		  (
-		   <DEFPROC> nameid = <idname > "(" x=parametrosPro()")" { VAR.put(nameid, x);salida = "Command: def proc ";}	    
+		   <DEFPROC> nameid = <idname > "("x=parametrosPro()")" { VAR.put(nameid, x);salida = "Command: def proc ";}	    
 		) 
 
 		{
@@ -389,16 +390,15 @@ TOKEN:  /* AUXILIARES*/
 		})+
 		| <EOF> {return -1;} 
 	}
-
-	void direction_leap(int Orien):
+void direction(int O):
 	{
 	int contador = 0;
-	while (Orien!= world.getfacing() && contador <= 6) { 
-	  world.turnRight();
-	  contador ++;
-	  }
 	}
-	{ }
+	{
+	  while (O!= world.getfacing() && contador <= 6) { 
+	  world.turnRight();
+	  contador ++; }
+	}
 
 		
 
