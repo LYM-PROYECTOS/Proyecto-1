@@ -13,7 +13,7 @@ Modificado por Silvia Takahashi
 options 
 {
   
-	LOOKAHEAD=1; 
+	LOOKAHEAD=3; 
 	IGNORE_CASE=true;
 	STATIC = false;
 	
@@ -125,7 +125,7 @@ TOKEN:  /* AUXILIARES*/
 	{
 		(
 		  (
-		   <DEFVAR> nameid = <idname > x=num() { VAR.put(nameid, x);salida = "Command: def var ";}	    
+		   <DEFVAR> <idname > { nameid = token.image; } x=num() { VAR.put(nameid, x);salida = "Command: def var ";}	    
 		) 
 
 		{
@@ -152,7 +152,7 @@ TOKEN:  /* AUXILIARES*/
 	{
 		(
 		  (
-		   <DEFPROC> nameid = <idname > "("x=parametrosPro()")" { VAR.put(nameid, x);salida = "Command: def proc ";}	    
+		   <DEFPROC> <idname > { nameid = token.image; } "("x=parametrosPro()")" { VAR.put(nameid, x);salida = "Command: def proc ";}	    
 		) 
 
 		{
@@ -191,7 +191,7 @@ TOKEN:  /* AUXILIARES*/
 									salida = "Command:Hopforward ";}
 		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);
 								salida = "Command:GO ";}  				  				
-	    |  nameid = <idname > "=" x=num() { VAR.put(nameid, x);salida = "Command:Assignar ";}
+	    |  <idname > { nameid=token.image; } "=" x=num() { VAR.put(nameid, x);salida = "Command:Assignar ";}
 	    | <JUMP > "(" x=num() "," y=num()")" {world.popBalloons(x);
 								 salida = "Comando:  Pop";}
 	    | <WALK> "(" Verifywalk()  ")"
@@ -395,11 +395,27 @@ void direction(int O):
 	int contador = 0;
 	}
 	{
-	  while (O!= world.getfacing() && contador <= 6) { 
-	  world.turnRight();
-	  contador ++; }
+	  {
+	    while (0!= world.getfacing() && contador <= 6) { 
+	  		world.turnRight();
+	  		contador ++;
+	  	}
+	  }
 	}
 
-		
+//BLOQUE
+	boolean bloque(Console sistema):
+	{
+		String instrucciones = "";
+	}
+	{
+	  (
+		 "(" s=command() ")" {instrucciones = instrucciones + s;} (";" bloque())*	bloque())+
+	
+	  {
+		return True;
+	  }
+	}
+//estructura
 
 	
