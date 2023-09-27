@@ -404,18 +404,29 @@ void direction(int O):
 	}
 
 //BLOQUE
-	boolean bloque(Console sistema):
+	Arraylist Verify_block():
 	{
-		String instrucciones = "";
+	  lista = new ArrayList(); 
 	}
 	{
-	  (
-		 "(" s=command() ")" {instrucciones = instrucciones + s;} (";" bloque())*	bloque())+
-	
+		"{" a = (Verifycomand() | Verifycycle()| Verifyif()) (b =(";"( Verifycomand() | Verifyblock()| Verifycycle()| Verifycondition())* ))? "}" 
+ 		{ 
+ 			lista.add(a);
+ 			if b != None:
+ 				lista.add(b)	
+ 		}
 	  {
-		return True;
+		return lista ;
 	  }
 	}
+
+	Arraylist ejecut_block() :
+	{
+	}
+	{
+	  
+	}
+	
 //estructura
 
 	
