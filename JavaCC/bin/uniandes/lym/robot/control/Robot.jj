@@ -406,7 +406,9 @@ void direction(int O):
 //BLOQUE
 	Arraylist Verify_block():
 	{
-	  lista = new ArrayList(); 
+	 List<ArrayList> lista = new ArrayList<ArrayList>();
+	 List<ArrayList> a = new ArrayList<ArrayList>();
+	 List<ArrayList> b = new ArrayList<ArrayList>();
 	}
 	{
 		"{" a = (Verifycomand() | Verifycycle()| Verifyif()) (b =(";"( Verifycomand() | Verifyblock()| Verifycycle()| Verifycondition())* ))? "}" 
@@ -420,12 +422,7 @@ void direction(int O):
 	  }
 	}
 
-	Arraylist ejecut_block() :
-	{
-	}
-	{
-	  
-	}
+
 	
 //estructura
 
