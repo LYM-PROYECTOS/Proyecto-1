@@ -168,7 +168,22 @@ TOKEN:  /* AUXILIARES*/
 	{
 	  { return resultado;}
 	}
-	
+	ArrayList VerifyWhile():
+	{
+	String condicion;
+	ArrayList bloque;
+	ArrayList resultado;
+	}
+	{
+	  (<WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); } )	  {return resultado; } 
+	}
+	String VerifyCondicion():
+	{
+	   String resultado;
+	}
+	{
+	  {return resultado; } 
+	}
 	String VerifyComandos():
 	{
 	  String resultado;
