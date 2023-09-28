@@ -368,35 +368,20 @@ void direction(int O):
 	  	}
 	  }
 	}
-void EjecutarAsignar(String Parameter):
-{
-  	ArrayList orden= Parameter.split(",");
-  	int valor=0;
-    String llave= orden.get(1);
-    if (VAR.containsKey(llave)) {
-      valor = Integer.parseInt(orden.get(2));
-      VAR.put(llave, valor);
-}
-{}
-void EjecutarMover(String Parameter):
-{
-}
-{
-}
-void EjecutarComando(String Parameter):
-{
-  ArrayList Comandos= Parameter.split(",");
-  String Comando= Comandos.get(0);
-  switch (Comando) {
-		case "assigt":
-			EjecutarAsignar(Parameter);
-        case "move":
-        	EjecutarMover(Parameter);
-        default:
-            sistema.printOutput("Opción no válida");
-      }
-}
-{
-}
+
+//BLOQUE
+	boolean bloque(Console sistema):
+	{
+		String instrucciones = "";
+	}
+	{
+	  (
+		 "(" s=command() ")" {instrucciones = instrucciones + s;} (";" bloque())*	bloque())+
+	
+	  {
+		return True;
+	  }
+	}
+//estructura
 
 	
