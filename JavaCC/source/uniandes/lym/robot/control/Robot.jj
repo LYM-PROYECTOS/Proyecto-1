@@ -36,9 +36,10 @@ import java.util.HashMap;
 @SuppressWarnings("serial")
 public class Robot 
 {
-
 	private HashMap<String, Integer> VAR = new HashMap<String, Integer>();
-	private HashMap<String, Integer> PROC = new HashMap<String, Integer>();
+	private HashMap<String, Integer> PROC_Parametro = new HashMap<String, Integer>();
+	private HashMap<String, Integer> PROC_Index = new HashMap<String, Integer>();
+	private HashMap<String, Arraylist> PROC_Ejecucion = new HashMap<String, Arraylist>();
 	private RobotWorldDec world;
 	
 	
@@ -113,62 +114,6 @@ TOKEN:  /* AUXILIARES*/
 		| < WEST: "west">
 		| < EAST: "east">
 }
-
-	boolean defvar(Console sistema):
-	{	
-		String nameid;
-		int x;
-		salida=new String();	
-	}
-
-	
-	{
-		(
-		  (
-		   <DEFVAR> <idname > { nameid = token.image; } x=num() { VAR.put(nameid, x);salida = "Command: def var ";}	    
-		) 
-
-		{
-		    try {
-	    			 Thread.sleep(900);
-	    	    } catch (InterruptedException e) {
-	    			        System.err.format("IOException: %s%n", e);
-	    		    }
-			sistema.printOutput(salida);
-			return true;
-		})+
-
-    	| <EOF> {return false;} 
-	}
-	
-	boolean defproc(Console sistema):
-	{	
-		String nameid;
-		int x;
-		salida=new String();	
-	}
-
-	
-	{
-		(
-		  (
-		   <DEFPROC> <idname > { nameid = token.image; } "("x=parametrosPro()")" { VAR.put(nameid, x);salida = "Command: def proc ";}	    
-		) 
-
-		{
-		    try {
-	    			 Thread.sleep(900);
-	    	    } catch (InterruptedException e) {
-	    			        System.err.format("IOException: %s%n", e);
-	    		    }
-			sistema.printOutput(salida);
-			return true;
-		})+
-
-    	| <EOF> {return false;} 
-	}
-
-	
 	//boolean command(uniandes.lym.robot.view.Console sistema) :
 	
 	boolean command(Console sistema):
@@ -180,35 +125,10 @@ TOKEN:  /* AUXILIARES*/
 
 	
 	{
-		(		  (
-		   <MOVE>  "(" x=num() ")" {world.moveForward(x,false);
-		   							salida = "Command: Moveforward ";}  
-		|  <PUT> "("  put() ")"
-		|  <PICK> "(" get()  ")"
-		|  <POP> "(" x=num() ")" {world.popBalloons(x);
-								 salida = "Comando:  Pop";}
-		|  <HOP>  "(" x=num() ")" {world.moveForward(x,true);
-									salida = "Command:Hopforward ";}
-		|  <GO>  "(" x=num() "," y=num()")" {world.setPostion(x,y);
-								salida = "Command:GO ";}  				  				
-	    |  <idname > { nameid=token.image; } "=" x=num() { VAR.put(nameid, x);salida = "Command:Assignar ";}
-	    | <JUMP > "(" x=num() "," y=num()")" {world.popBalloons(x);
-								 salida = "Comando:  Pop";}
-	    | <WALK> "(" Verifywalk()  ")"
-	    | < LEAP> "(" VerifyLeap() ")"
-	    | < TURN > "(" VerifyTurn() ")"
-	    | < TURNTO>  "(" VerifyTurnTo() ")"
-	    | < DROP> "(" x=num() ")" {world.pickChips(x);
-	    							salida = "Command:Grab ";}
-	    | < GET> "(" x=num() ")" {world.pickChips(x);
-	    							salida = "Command:Grab ";}
-	    | < GRAB>"(" x=num() ")" {world.grabBalloons(x);
-	    							salida = "Command:Grab ";}
-	    | < LETGO> "(" x=num() ")" {world.putBalloons(x);
-	    							salida = "Command:letGo ";}
-	    | < NOP> "(" ")" {salida = "Command:Nop ";}
-	    
-		) ";" 
+		(
+		     (VerifyVar())
+		  |	 (defproc())
+		  |  (VerifyBlock())
 
 		{
 		    try {
@@ -222,25 +142,77 @@ TOKEN:  /* AUXILIARES*/
 
     	| <EOF> {return false;} 
 	}
-
-	void put() :
+	//DESARROLLLO PARSER Y SINTAXIS 
+	void VerifyVar():
+	{	
+		String nameid;
+		int x;
+	}
 	{
-		int f=1;	
+		   <DEFVAR> <idname > { nameid = token.image; } x=num() { VAR.put(nameid, x); }
+	}
+	
+	void VerifyPROC():
+	{	
+		String nameid;
+		Arraylist x;
+	}
+	{
+		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro() { })
+	}
+	
+	ArrayList VerifyBlock():
+	{
+	  ArrayList resultado= new ArrayList();
+	}
+	{
+	  { return resultado;}
+	}
+	
+	String VerifyComandos():
+	{
+	  String resultado;
+	}
+	{
+	  		(<MOVE>  "(" x=num() ")" {resultado = "move, "+ Integer.toString(x); return resultado;}  )
+		|   (<PUT> "(" { resultado = VerifyPut(); return resultado; } ")")
+		|   (<PICK> "(" { resultado = VerifyGet(); return resultado; } ")")
+		|   (<POP> "(" x=num() ")" {resultado = "pop, "+ Integer.toString(x); return resultado;})
+		|   (<HOP>  "(" x=num() ")" {resultado = "hop, "+ Integer.toString(x); return resultado;})
+		|   (<GO>  "(" x=num() "," y=num()")" {resultado = "go, "+ Integer.toString(x)+", " + Integer.toString(y); return resultado;})  				  				
+	    |   (<idname > { nameid=token.image; } "=" x=num() {resultado = "assigt, "+nameid +", "+ Integer.toString(x); return resultado; })
+	    |   (<JUMP > "(" x=num() "," y=num()")" {resultado = "jump, "+ Integer.toString(x)+", " + Integer.toString(y); return resultado;})
+	    | <WALK> "(" Verifywalk()  ")"
+	    | < LEAP> "(" VerifyLeap() ")"
+	    | < TURN > "(" VerifyTurn() ")"
+	    | < TURNTO>  "(" VerifyTurnTo() ")"
+	    | 	(< DROP> "(" x=num() ")" {resultado = "drop, "+ Integer.toString(x); return resultado;})
+	    |   (<GET> "(" x=num() ")" {resultado = "get, "+ Integer.toString(x); return resultado;})
+	    |   (<GRAB>"(" x=num() ")" {resultado = "grab, "+ Integer.toString(x); return resultado;})
+	    | 	(<LETGO> "(" x=num() ")" {resultado = "letgo, "+ Integer.toString(x); return resultado;})
+	    |   (< NOP> "(" ")" {resultado = "nop"; return resultado;})
+	}
+
+	String VerifyPut() :
+	{
+		int f=1;
+		String resultado;	
 	}
 	{
 		( <CHIPS>    "," f=num() {world.putChips(f); salida = "Command:  Put Chips"; })
-		|  	  ( <BALLOONS>   "," f=num() {world.putBalloons(f); salida = "Command:  Put Balloons";})	 
-
+		|  	  ( <BALLOONS>   "," f=num() {world.putBalloons(f); salida = "Command:  Put Balloons";})
+		{return resultado; } 
 	}
 
-	void get() :
+	String VerifyGet() :
 	{
-		int f=1;	
+		int f=1;
+		String resultado;	
 	}
 	{
 		( <CHIPS>   "," f=num() {world.pickChips(f);salida = "Command:  Pick chips";})
 		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
-
+		{return resultado; } 
 	}
 	void VerifyLeap():
 	{
@@ -369,26 +341,20 @@ TOKEN:  /* AUXILIARES*/
 			return total;
 		}
 	}
-	int parametrosPro():
+	ArrayList parametrosPro():
 	{	
 		int contador = 0;
-		int x;	
+		int x;
+		ArrayList retorno;
 	}	
 	{
-		(
-		  (<idname >{contador ++;}
-	    | x=num(){contador ++;}
-		) "," 
-
-		{
-		    try {
-	    			 Thread.sleep(900);
-	    	    } catch (InterruptedException e) {
-	    			        System.err.format("IOException: %s%n", e);
-	    		    }
-			return contador;
-		})+
-		| <EOF> {return -1;} 
+			( "(" )
+		| 	(<idname > { nameid = token.image; } "," {retorno.add(nameid); })
+		|	(<idname > { nameid = token.image; }{retorno.add(nameid); })
+		|   ( x=num(){retorno.add(x); })
+		|   ( x=num()","{retorno.add(x); })
+		| (")")
+		{return retorno;} 
 	}
 void direction(int O):
 	{
@@ -396,26 +362,41 @@ void direction(int O):
 	}
 	{
 	  {
-	    while (0!= world.getfacing() && contador <= 6) { 
+	    while (0!= world.getacing() && contador <= 6) { 
 	  		world.turnRight();
 	  		contador ++;
 	  	}
 	  }
 	}
-
-//BLOQUE
-	boolean bloque(Console sistema):
-	{
-		String instrucciones = "";
-	}
-	{
-	  (
-		 "(" s=command() ")" {instrucciones = instrucciones + s;} (";" bloque())*	bloque())+
-	
-	  {
-		return True;
-	  }
-	}
-//estructura
+void EjecutarAsignar(String Parameter):
+{
+  	ArrayList orden= Parameter.split(",");
+  	int valor=0;
+    String llave= orden.get(1);
+    if (VAR.containsKey(llave)) {
+      valor = Integer.parseInt(orden.get(2));
+      VAR.put(llave, valor);
+}
+{}
+void EjecutarMover(String Parameter):
+{
+}
+{
+}
+void EjecutarComando(String Parameter):
+{
+  ArrayList Comandos= Parameter.split(",");
+  String Comando= Comandos.get(0);
+  switch (Comando) {
+		case "assigt":
+			EjecutarAsignar(Parameter);
+        case "move":
+        	EjecutarMover(Parameter);
+        default:
+            sistema.printOutput("Opción no válida");
+      }
+}
+{
+}
 
 	
