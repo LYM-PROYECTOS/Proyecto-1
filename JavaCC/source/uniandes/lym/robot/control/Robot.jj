@@ -166,6 +166,43 @@ TOKEN:  /* AUXILIARES*/
 	  ArrayList resultado= new ArrayList();
 	}
 	{
+	 (	   "{"(bloque1|bloque2|bloque3|bloque4)"}"
+	  ArrayList bloque1():
+	  {
+	    String comando
+	    
+	  }
+	  {
+	    {comando= VerifyComandos();}(";" VerifyBlock();)*{;resultado.add(comando); }
+	  }
+	  { return resultado }
+	  ArrayList bloque2():
+	  {
+	    Arraylist WHILE
+	    
+	  }
+	  {
+	    {WHILE= VerifyWhile();}(";" VerifyBlock();)*{;resultado.add(WHILE); }
+	  }
+	  { return resultado }
+	  ArrayList bloque3():
+	  {
+	    Arraylist repeat
+	    
+	  }
+	  {
+	    {repeat= VerifyRepeat();}(";" VerifyBlock();)*{;resultado.add(repeat); }
+	  }
+	  { return resultado }
+	  ArrayLis bloque4():
+	  {
+	    Arraylist IF
+	    
+	  }
+	  {
+	    {IF= VerifyIf();}(";" VerifyBlock();)*{;resultado.add(IF); }
+	  } { return resultado }
+	  )
 	  { return resultado;}
 	}
 	ArrayList VerifyWhile():
@@ -182,7 +219,54 @@ TOKEN:  /* AUXILIARES*/
 	   String resultado;
 	}
 	{
+	{
+	  facing() | can() | not()
+	  
+	}
+		String facing():
+		{
+		}
+		{
+		  (<FACING> "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")")
+		}
+		return resultado
+		
+		String can():
+		{
+		}
+		{
+		  (<CAN> "(" {resultado =VerifyComandos();} ")")
+		}
+		{return resultado; }
+		 
+		String not():
+		{
+		}
+		{ (<NOT> "(" (VerifyComandos();)* ")") }
+	  	{return resultado; } 
+	}
+
+	ArrayList VerifyIf():
+	{
+	String condicion;
+	String condicion2;
+	ArrayList bloque;
+	ArrayList bloque2;
+	ArrayList resultado;
+	}
+	{
+	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> {condicion2=VerifyCondicion();}{ bloque = VerifyBlock();})* {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(condicion2);resultado.add(bloque2) } )
 	  {return resultado; } 
+	}
+	ArrayList VerifyRepeat():
+	{
+	  Arraylist bloque;
+	  int x
+	  Arraylist resultado;
+	}
+	{
+	  (<REPEAT> { x=num()} {bloque = VerifyBlock();} {resultado.add("Repeat");resultado.add(x);reultado.add(bloque)})
+	  {return resultado;}
 	}
 	String VerifyComandos():
 	{
