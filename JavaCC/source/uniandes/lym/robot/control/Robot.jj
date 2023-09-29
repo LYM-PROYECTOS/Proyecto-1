@@ -166,45 +166,10 @@ TOKEN:  /* AUXILIARES*/
 	  ArrayList resultado= new ArrayList();
 	}
 	{
-	 (	   "{"(bloque1|bloque2|bloque3|bloque4)"}"
-	  ArrayList bloque1():
-	  {
-	    String comando
-	    
-	  }
-	  {
-	    {comando= VerifyComandos();}(";" VerifyBlock();)*{;resultado.add(comando); }
-	  }
-	  { return resultado }
-	  ArrayList bloque2():
-	  {
-	    Arraylist WHILE
-	    
-	  }
-	  {
-	    {WHILE= VerifyWhile();}(";" VerifyBlock();)*{;resultado.add(WHILE); }
-	  }
-	  { return resultado }
-	  ArrayList bloque3():
-	  {
-	    Arraylist repeat
-	    
-	  }
-	  {
-	    {repeat= VerifyRepeat();}(";" VerifyBlock();)*{;resultado.add(repeat); }
-	  }
-	  { return resultado }
-	  ArrayLis bloque4():
-	  {
-	    Arraylist IF
-	    
-	  }
-	  {
-	    {IF= VerifyIf();}(";" VerifyBlock();)*{;resultado.add(IF); }
-	  } { return resultado }
-	  )
-	  { return resultado;}
+	 (	   "{" (VerifyVar()|VerifyCondicion()|VerifyWhile()| VerifyIf()|VerifyComandos()|VerifyRepeat()) "}"
+     )
 	}
+	
 	ArrayList VerifyWhile():
 	{
 	String condicion;
@@ -212,22 +177,19 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList resultado;
 	}
 	{
-	  (<WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); } )	  {return resultado; } 
+	  <WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); }	  {return resultado; } 
 	}
+	
 	String VerifyCondicion():
 	{
 	   String resultado;
 	}
 	{
-	{
-	  facing() | can() | not()
-	  
-	}
+	    facing() | can() | not()
 		String facing():
 		{
 		}
-		{
-		  (<FACING> "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")")
+		{		    <FACING> { resultado =token.image;} "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")" 
 		}
 		return resultado
 		
@@ -235,15 +197,16 @@ TOKEN:  /* AUXILIARES*/
 		{
 		}
 		{
-		  (<CAN> "(" {resultado =VerifyComandos();} ")")
+		  <CAN> "(" {resultado =VerifyComandos();} ")"
 		}
 		{return resultado; }
 		 
 		String not():
 		{
 		}
-		{ (<NOT> "(" (VerifyComandos();)* ")") }
-	  	{return resultado; } 
+		{ <NOT> "(" { VerifyComandos();} ")" }
+	  	{return resultado; }
+     }
 	}
 
 	ArrayList VerifyIf():
@@ -447,15 +410,15 @@ TOKEN:  /* AUXILIARES*/
 		ArrayList retorno;
 	}	
 	{
-			( "(" )
-		| 	(<idname > { nameid = token.image; } "," {retorno.add(nameid); })
-		|	(<idname > { nameid = token.image; }{retorno.add(nameid); })
-		|   ( x=num(){retorno.add(x); })
-		|   ( x=num()","{retorno.add(x); })
-		| (")")
+			"("
+		| 	<idname > { nameid = token.image; } "," {retorno.add(nameid); }
+		|	<idname > { nameid = token.image; }{retorno.add(nameid); }
+		|    x=num(){retorno.add(x); }
+		|    x=num()","{retorno.add(x); }
+		|   ")"
 		{return retorno;} 
 	}
-void direction(int O):
+void direction(int direccion):
 	{
 	int contador = 0;
 	}
