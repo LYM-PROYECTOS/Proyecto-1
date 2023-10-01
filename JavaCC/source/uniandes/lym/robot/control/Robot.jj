@@ -161,50 +161,7 @@ TOKEN:  /* AUXILIARES*/
 		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro() { })
 	}
 	
-	ArrayList VerifyBlock():
-	{
-	  ArrayList resultado= new ArrayList();
-	}
-	{
-	 (	   "{"(bloque1|bloque2|bloque3|bloque4)"}"
-	  ArrayList bloque1():
-	  {
-	    String comando
-	    
-	  }
-	  {
-	    {comando= VerifyComandos();}(";" VerifyBlock();)*{;resultado.add(comando); }
-	  }
-	  { return resultado }
-	  ArrayList bloque2():
-	  {
-	    Arraylist WHILE
-	    
-	  }
-	  {
-	    {WHILE= VerifyWhile();}(";" VerifyBlock();)*{;resultado.add(WHILE); }
-	  }
-	  { return resultado }
-	  ArrayList bloque3():
-	  {
-	    Arraylist repeat
-	    
-	  }
-	  {
-	    {repeat= VerifyRepeat();}(";" VerifyBlock();)*{;resultado.add(repeat); }
-	  }
-	  { return resultado }
-	  ArrayLis bloque4():
-	  {
-	    Arraylist IF
-	    
-	  }
-	  {
-	    {IF= VerifyIf();}(";" VerifyBlock();)*{;resultado.add(IF); }
-	  } { return resultado }
-	  )
-	  { return resultado;}
-	}
+	
 	ArrayList VerifyWhile():
 	{
 	String condicion;
@@ -273,23 +230,24 @@ TOKEN:  /* AUXILIARES*/
 	  String resultado;
 	}
 	{
-	  		(<MOVE>  "(" x=num() ")" {resultado = "move, "+ Integer.toString(x); return resultado;}  )
-		|   (<PUT> "(" { resultado = VerifyPut(); return resultado; } ")")
-		|   (<PICK> "(" { resultado = VerifyGet(); return resultado; } ")")
-		|   (<POP> "(" x=num() ")" {resultado = "pop, "+ Integer.toString(x); return resultado;})
-		|   (<HOP>  "(" x=num() ")" {resultado = "hop, "+ Integer.toString(x); return resultado;})
-		|   (<GO>  "(" x=num() "," y=num()")" {resultado = "go, "+ Integer.toString(x)+", " + Integer.toString(y); return resultado;})  				  				
-	    |   (<idname > { nameid=token.image; } "=" x=num() {resultado = "assigt, "+nameid +", "+ Integer.toString(x); return resultado; })
-	    |   (<JUMP > "(" x=num() "," y=num()")" {resultado = "jump, "+ Integer.toString(x)+", " + Integer.toString(y); return resultado;})
-	    | <WALK> "(" Verifywalk()  ")"
-	    | < LEAP> "(" VerifyLeap() ")"
-	    | < TURN > "(" VerifyTurn() ")"
-	    | < TURNTO>  "(" VerifyTurnTo() ")"
-	    | 	(< DROP> "(" x=num() ")" {resultado = "drop, "+ Integer.toString(x); return resultado;})
-	    |   (<GET> "(" x=num() ")" {resultado = "get, "+ Integer.toString(x); return resultado;})
-	    |   (<GRAB>"(" x=num() ")" {resultado = "grab, "+ Integer.toString(x); return resultado;})
-	    | 	(<LETGO> "(" x=num() ")" {resultado = "letgo, "+ Integer.toString(x); return resultado;})
-	    |   (< NOP> "(" ")" {resultado = "nop"; return resultado;})
+	  		(<MOVE>  "(" x=VarORNum() ")" {resultado = "move,"+ Integer.toString(x);}  )
+		|   (<PUT> "(" { resultado = VerifyPut();  } ")")
+		|   (<PICK> "(" { resultado = VerifyGet();  } ")")
+		|   (<POP> "(" x=VarORNum() ")" {resultado = "pop,"+ Integer.toString(x); })
+		|   (<HOP>  "(" x=VarORNum() ")" {resultado = "hop,"+ Integer.toString(x);})
+		|   (<GO>  "(" x=VarORNum() "," y=num()")" {resultado = "go,"+ Integer.toString(x)+", " + Integer.toString(y);})  				  				
+	    |   (<idname > { nameid=token.image; } "=" x=VarORNum() {resultado = "assigt,"+nameid +","+ Integer.toString(x);})
+	    |   (<JUMP > "(" x=VarORNum() "," y=num()")" {resultado = "jump,"+ Integer.toString(x)+"," + Integer.toString(y);})
+	    |   (<WALK> "(" resultado = Verifywalk()  ")")
+	    |   (< LEAP> "(" resultado =VerifyLeap() ")")
+	    |   (< TURN > "(" resultado =VerifyTurn() ")")
+	    |   (< TURNTO>  "(" resultado =VerifyTurnTo() ")")
+	    | 	(< DROP> "(" x=VarORNum() ")" {resultado = "drop,"+ Integer.toString(x); })
+	    |   (<GET> "(" x=VarORNum() ")" {resultado = "get,"+ Integer.toString(x); })
+	    |   (<GRAB>"(" x=VarORNum() ")" {resultado = "grab,"+ Integer.toString(x); })
+	    | 	(<LETGO> "(" x=VarORNum() ")" {resultado = "letgo,"+ Integer.toString(x); })
+	    |   (< NOP> "(" ")" {resultado = "nop";})
+	    { return resultado;}
 	}
 
 	String VerifyPut() :
@@ -298,8 +256,8 @@ TOKEN:  /* AUXILIARES*/
 		String resultado;	
 	}
 	{
-		( <CHIPS>    "," f=num() {world.putChips(f); salida = "Command:  Put Chips"; })
-		|  	  ( <BALLOONS>   "," f=num() {world.putBalloons(f); salida = "Command:  Put Balloons";})
+		( <CHIPS>    "," f=num() {resultado = "put,chips," +Integer.toString(f);})
+		|  	  ( <BALLOONS>   "," f=num() {resultado = "put,balloons," +Integer.toString(f);})
 		{return resultado; } 
 	}
 
@@ -309,112 +267,67 @@ TOKEN:  /* AUXILIARES*/
 		String resultado;	
 	}
 	{
-		( <CHIPS>   "," f=num() {world.pickChips(f);salida = "Command:  Pick chips";})
-		|  	  ( <BALLOONS>   "," f=num() {world.grabBalloons(f);salida="Command:  Pick balloons";})	 
+		( <CHIPS>   "," f=num() {resultado = "pick,chips," +Integer.toString(f);})
+		|  	  ( <BALLOONS>   "," f=num() {resultado = "pick,chips," +Integer.toString(f);})	 
 		{return resultado; } 
 	}
-	void VerifyLeap():
+	String VerifyLeap():
 	{
 	  	int steps=1;
+	  	String resultado;	
 	}
-	{		(steps = num() { world.moveForward(steps,false);
-							 salida = "Command : leap S";})
-		|	(steps = num()","<FRONT> { world.moveForward(steps,false);
-									salida = "Command : leap front";})
-		| 	(steps = num()","<RIGHT> {world.turnRight();
-										world.moveForward(steps,false);
-										world.turnRight();
-										world.turnRight();
-										world.turnRight();
-										salida = "Command : leap right";})
-		| 	(steps = num()","<LEFT> {world.turnRight();
-									world.turnRight();
-									world.turnRight();
-									world.moveForward(steps,false);
-									world.turnRight();
-									 salida = "Command : leap left";})
-		| 	(steps = num()","<BACK> {world.turnRight();
-									world.turnRight();
-									world.moveForward(steps,false);
-									world.turnRight();
-									world.turnRight();
-									salida = "Command : leap back";})
-		| 	(steps = num()","<NORTH> {direction(0);
-										world.moveForward(steps,false);
-										salida = "Command : leap north";})
-		| 	(steps = num()","<SOUTH> {direction(1);
-										world.moveForward(steps,false);
-										salida = "Command : leap south";})
-		| 	(steps = num()","<EAST> {direction(2);
-										world.moveForward(steps,false);
-										salida = "Command : leap EAST";})
-		| 	(steps = num()","<WEST> {direction(3);
-										world.moveForward(steps,false);
-										salida = "Command : leap WEST";})		
+	{		(steps = num() {resultado = "leap," +Integer.toString(steps);})
+		|	(steps = num()","<FRONT> {resultado = "leap,front" +Integer.toString(steps);})
+		| 	(steps = num()","<RIGHT> {resultado = "leap,right" +Integer.toString(steps);})
+		| 	(steps = num()","<LEFT> {resultado = "leap,left" +Integer.toString(steps);})
+		| 	(steps = num()","<BACK> {resultado = "leap,back" +Integer.toString(steps);})
+		| 	(steps = num()","<NORTH> {resultado = "leap,north" +Integer.toString(steps);})
+		| 	(steps = num()","<SOUTH> {resultado = "leap,south" +Integer.toString(steps);})
+		| 	(steps = num()","<EAST> {resultado = "leap,east" +Integer.toString(steps);})
+		| 	(steps = num()","<WEST> {resultado = "leap,west" +Integer.toString(steps);})		
+		{return resultado; } 
+	}
+	
+	String VerifyTurn():
+	{
+	  String resultado;	
+	}
+	{
+	  		(< RIGHT> {resultado = "turn,right";})
+		| 	(<LEFT> {resultado = "turn,left";})
+		| 	(<AROUND> {resultado = "turn,around";})
+		{return resultado; } 
+	}
 
+	
+	String VerifyTurnTo():
+	{
+	  String resultado;
+	}
+	{
+	  		(<NORTH> {resultado = "turnto,north";})
+		| 	(<SOUTH> {resultado = "turnto,south";})
+		| 	(<EAST> {resultado = "turnto,east";})
+		| 	(<WEST> {resultado = "turnto,west";})
+		{return resultado; } 
 	}
 	
-	void VerifyTurn():
-	{
-	}
-	{
-	  		(< RIGHT> {world.turnRight();
-	  					salida = "Command : TURN RIGHT";})
-		| 	(<LEFT> {world.turnRight();
-					world.turnRight();
-					world.turnRight();
-					salida = "Command : TURN LEFT";})
-		| 	(<AROUND> {world.turnRight();
-						world.turnRight();
-						salida = "Command : TURN AROUND";})
-	}
-	void  VerifyTurnTo():
-	{
-	}
-	{
-	  		(<NORTH> {direction(0);
-					salida = "Command : TurnTo north";})
-		| 	(<SOUTH> {direction(1);
-					salida = "Command : TurnTo south";})
-		| 	(<EAST> {direction(2);
-					salida = "Command : TurnTo EAST";})
-		| 	(<WEST> {direction(3);
-					salida = "Command : TurnTo WEST";})
-	}
-	
-	void Verifywalk():
+	String Verifywalk():
 	{
 	  int steps=1;
+	  String resultado;
 	}
 	{
-			(steps = num() { world.moveForward(steps,false);
-							 salida = "Command : move";})
-		|	(steps = num()","<FRONT> { world.moveForward(steps,false);
-									salida = "Command : moveFRONT";})
-		| 	(steps = num()","<RIGHT> {world.turnRight();
-										world.moveForward(steps,false);
-										salida = "Command : moveFRONT";})
-		| 	(steps = num()","<LEFT> {world.turnRight();
-									world.turnRight();
-									world.turnRight();
-									world.moveForward(steps,false);
-									 salida = "Command : moveLEFT";})
-		| 	(steps = num()","<BACK> {world.turnRight();
-									world.turnRight();
-									world.moveForward(steps,false);
-									salida = "Command : moveLEFT";})
-		| 	(steps = num()","<NORTH> {direction(0);
-										world.moveForward(steps,false);
-										salida = "Command : leap north";})
-		| 	(steps = num()","<SOUTH> {direction(1);
-										world.moveForward(steps,false);
-										salida = "Command : leap south";})
-		| 	(steps = num()","<EAST> {direction(2);
-										world.moveForward(steps,false);
-										salida = "Command : leap EAST";})
-		| 	(steps = num()","<WEST> {direction(3);
-										world.moveForward(steps,false);
-										salida = "Command : leap WEST";})	
+			(steps = num() {resultado = "walk," +Integer.toString(steps);})
+		|	(steps = num()","<FRONT> { resultado = "walk,front" +Integer.toString(steps);})
+		| 	(steps = num()","<RIGHT> {resultado = "walk,right" +Integer.toString(steps);})
+		| 	(steps = num()","<LEFT> {resultado = "walk,left" +Integer.toString(steps);})
+		| 	(steps = num()","<BACK> {resultado = "walk,back" +Integer.toString(steps);})
+		| 	(steps = num()","<NORTH> {resultado = "walk,north" +Integer.toString(steps);})
+		| 	(steps = num()","<SOUTH> {resultado = "walk,south" +Integer.toString(steps);})
+		| 	(steps = num()","<EAST> {resultado = "walk,east" +Integer.toString(steps);})
+		| 	(steps = num()","<WEST> {resultado = "walk,west" +Integer.toString(steps);})
+		{return resultado; } 	
 	}
 	
 	/**
@@ -422,7 +335,7 @@ TOKEN:  /* AUXILIARES*/
 	 * @return the corresponding value of the string
 	 * @error  corresponding value is too large
 	 */
-	int num() throws Error:
+	int num() throws Error
 	{	
 		int total=1;
 	}
@@ -455,17 +368,15 @@ TOKEN:  /* AUXILIARES*/
 		| (")")
 		{return retorno;} 
 	}
-void direction(int O):
+void direction(int Orientacion):
 	{
 	int contador = 0;
-	}
-	{
-	  {
-	    while (0!= world.getacing() && contador <= 6) { 
+	while (Orientacion != world.getFacing() && contador <= 6) { 
 	  		world.turnRight();
 	  		contador ++;
 	  	}
-	  }
+	}
+	{
 	}
 void EjecutarAsignar(String Parameter):
 {
@@ -477,27 +388,82 @@ void EjecutarAsignar(String Parameter):
       VAR.put(llave, valor);
 }
 {}
-void EjecutarMover(String Parameter):
-{
-}
-{
-}
+
 void EjecutarComando(String Parameter):
 {
   ArrayList Comandos= Parameter.split(",");
   String Comando= Comandos.get(0);
   switch (Comando) {
-		case "assigt":
-			EjecutarAsignar(Parameter);
         case "move":
-        	EjecutarMover(Parameter);
+        	if (Comandos.length > 2) {
+        	  	Comando= Comandos.get(1);
+        	  	steps = Integer.parseInt(Comandos.get(2));
+        	  	switch (Comando) {
+					case "front":
+						world.moveForward(steps,false);
+					case "right":
+						world.turnRight();
+						world.moveForward(steps,false);
+					case "left":
+						world.turnRight();
+						world.turnRight();
+						world.turnRight();
+						world.moveForward(steps,false);
+					case "back":
+						world.turnRight();
+						world.turnRight();
+						world.moveForward(steps,false);
+					case "north":
+						direction(0);
+						world.moveForward(steps,false);
+					case "south":
+						direction(1);
+						world.moveForward(steps,false);
+					case "east":
+						direction(2);
+						world.moveForward(steps,false);
+					case "west":
+						direction(3);
+						world.moveForward(steps,false);
+        		}
+       		}
+       		else {
+            	steps = Integer.parseInt(Comandos.get(1));
+            	world.moveForward(steps,false);
+        }
+		case "put":
+		case "get":
+		case "pop":
+		case "hop":
+		case "go":
+		case "assigt":
+			
+		case "jump":
+		case "walk":
+		case "leap":
+		case "turn":
+		case "turnto":
+		case "drop":
+		case "get":
+		case "grab":
+		case "letgo":
+		case "nop":
         default:
-            sistema.printOutput("Opción no válida");
+       sistema.printOutput("Opción no válida");
       }
 }
 {
 }
-
+int VarORNum():
+	{	
+		int total=0;
+		String name;
+	}
+	{
+		  (<NUM>{total = Integer.parseInt(token.image);})
+		| (<ID> {name = token.image; if (Variables.containsKey(name.toLowerCase())) { total = Variables.get(name.toLowerCase()); }})
+		{return total; }
+	}
 //BLOQUE
 	boolean bloque(Console sistema):
 	{
@@ -513,4 +479,4 @@ void EjecutarComando(String Parameter):
 	}
 //estructura
 
-	
+
