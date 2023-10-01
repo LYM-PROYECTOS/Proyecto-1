@@ -188,29 +188,33 @@ TOKEN:  /* AUXILIARES*/
 	}
 	{
 	    facing() | can() | not()
-		String facing():
+		{return resultado;}
+	}
+	String facing():
 		{
+		  String resultado;
 		}
 		{
 		    <FACING> { resultado =token.image;} "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")" 
+			{return resultado; }
 		}
-		return resultado
 		
 		String can():
 		{
+		  String resultado;
 		}
 		{
 		  <CAN> "(" {resultado =VerifyComandos();} ")"
+		  {return resultado; }
 		}
-		{return resultado; }
+
 		 
 		String not():
 		{
+		  String resultado;
 		}
-		{ <NOT> "(" { VerifyComandos();} ")" }
-	  	{return resultado; }
-     }
-	}
+		{ <NOT> "(" { VerifyComandos();} ")"
+		{return resultado; }}
 
 	ArrayList VerifyIf():
 	{
@@ -221,17 +225,17 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList resultado;
 	}
 	{
-	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> {condicion2=VerifyCondicion();}{ bloque = VerifyBlock();})* {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(condicion2);resultado.add(bloque2) } )
+	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> {condicion2=VerifyCondicion();}{ bloque = VerifyBlock();})* {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(condicion2);resultado.add(bloque2); } )
 	  {return resultado; } 
 	}
 	ArrayList VerifyRepeat():
 	{
 	  Arraylist bloque;
-	  int x
+	  int x;
 	  Arraylist resultado;
 	}
 	{
-	  (<REPEAT> { x=num()} {bloque = VerifyBlock();} {resultado.add("Repeat");resultado.add(x);reultado.add(bloque)})
+	  (<REPEAT> x=num() {bloque = VerifyBlock();} {resultado.add("Repeat");resultado.add(x);reultado.add(bloque);})
 	  {return resultado;}
 	}
 	String VerifyComandos():
@@ -486,6 +490,5 @@ int VarORNum():
 		return True;
 	  }
 	}
-//estructura
 
-
+//estructuraS
