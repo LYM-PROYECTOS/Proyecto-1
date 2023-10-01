@@ -161,6 +161,15 @@ TOKEN:  /* AUXILIARES*/
 		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro() { })
 	}
 	
+	ArrayList VerifyBlock():
+	{
+	  ArrayList resultado= new ArrayList();
+	}
+	{
+	 (
+	   "{" (VerifyVar()|VerifyCondicion()|VerifyWhile()| VerifyIf()|VerifyComandos()|VerifyRepeat()) "}"
+     )
+	}
 	
 	ArrayList VerifyWhile():
 	{
@@ -169,22 +178,21 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList resultado;
 	}
 	{
-	  (<WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); } )	  {return resultado; } 
+	  <WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); }
+	  {return resultado; } 
 	}
+	
 	String VerifyCondicion():
 	{
 	   String resultado;
 	}
 	{
-	{
-	  facing() | can() | not()
-	  
-	}
+	    facing() | can() | not()
 		String facing():
 		{
 		}
 		{
-		  (<FACING> "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")")
+		    <FACING> { resultado =token.image;} "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")" 
 		}
 		return resultado
 		
@@ -192,15 +200,16 @@ TOKEN:  /* AUXILIARES*/
 		{
 		}
 		{
-		  (<CAN> "(" {resultado =VerifyComandos();} ")")
+		  <CAN> "(" {resultado =VerifyComandos();} ")"
 		}
 		{return resultado; }
 		 
 		String not():
 		{
 		}
-		{ (<NOT> "(" (VerifyComandos();)* ")") }
-	  	{return resultado; } 
+		{ <NOT> "(" { VerifyComandos();} ")" }
+	  	{return resultado; }
+     }
 	}
 
 	ArrayList VerifyIf():
@@ -360,12 +369,12 @@ TOKEN:  /* AUXILIARES*/
 		ArrayList retorno;
 	}	
 	{
-			( "(" )
-		| 	(<idname > { nameid = token.image; } "," {retorno.add(nameid); })
-		|	(<idname > { nameid = token.image; }{retorno.add(nameid); })
-		|   ( x=num(){retorno.add(x); })
-		|   ( x=num()","{retorno.add(x); })
-		| (")")
+			"("
+		| 	<idname > { nameid = token.image; } "," {retorno.add(nameid); }
+		|	<idname > { nameid = token.image; }{retorno.add(nameid); }
+		|    x=num(){retorno.add(x); }
+		|    x=num()","{retorno.add(x); }
+		|   ")"
 		{return retorno;} 
 	}
 void direction(int Orientacion):
