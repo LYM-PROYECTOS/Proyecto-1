@@ -249,13 +249,7 @@ TOKEN:  /* AUXILIARES*/
 	  String resultado;
 	}
 	{
-	  		(<MOVE>  "(" x=VarORNum() ")" {resultado = "move,"+ Integer.toString(x);}  )
-		|   (<PUT> "(" { resultado = VerifyPut();  } ")")
-		|   (<PICK> "(" { resultado = VerifyGet();  } ")")
-		|   (<POP> "(" x=VarORNum() ")" {resultado = "pop,"+ Integer.toString(x); })
-		|   (<HOP>  "(" x=VarORNum() ")" {resultado = "hop,"+ Integer.toString(x);})
-		|   (<GO>  "(" x=VarORNum() "," y=num()")" {resultado = "go,"+ Integer.toString(x)+", " + Integer.toString(y);})  				  				
-	    |   (<idname > { nameid=token.image; } "=" x=VarORNum() {resultado = "assigt,"+nameid +","+ Integer.toString(x);})
+	     	(<idname > { nameid=token.image; } "=" x=VarORNum() {resultado = "assigt,"+nameid +","+ Integer.toString(x);})
 	    |   (<JUMP > "(" x=VarORNum() "," y=num()")" {resultado = "jump,"+ Integer.toString(x)+"," + Integer.toString(y);})
 	    |   (<WALK> "(" resultado = Verifywalk()  ")")
 	    |   (< LEAP> "(" resultado =VerifyLeap() ")")
@@ -269,27 +263,6 @@ TOKEN:  /* AUXILIARES*/
 	    { return resultado;}
 	}
 
-	String VerifyPut() :
-	{
-		int f=1;
-		String resultado;	
-	}
-	{
-		( <CHIPS>    "," f=num() {resultado = "put,chips," +Integer.toString(f);})
-		|  	  ( <BALLOONS>   "," f=num() {resultado = "put,balloons," +Integer.toString(f);})
-		{return resultado; } 
-	}
-
-	String VerifyGet() :
-	{
-		int f=1;
-		String resultado;	
-	}
-	{
-		( <CHIPS>   "," f=num() {resultado = "pick,chips," +Integer.toString(f);})
-		|  	  ( <BALLOONS>   "," f=num() {resultado = "pick,chips," +Integer.toString(f);})	 
-		{return resultado; } 
-	}
 	String VerifyLeap():
 	{
 	  	int steps=1;
@@ -372,11 +345,12 @@ TOKEN:  /* AUXILIARES*/
 			return total;
 		}
 	}
+	
 	ArrayList parametrosPro():
 	{	
 		int contador = 0;
 		int x;
-		ArrayList retorno;
+		ArrayList<Object> retorno = new ArrayList<>();
 	}	
 	{
 			"("
@@ -413,7 +387,7 @@ void EjecutarComando(String Parameter):
   ArrayList Comandos= Parameter.split(",");
   String Comando= Comandos.get(0);
   switch (Comando) {
-        case "move":
+        case "walk":
         	if (Comandos.length > 2) {
         	  	Comando= Comandos.get(1);
         	  	steps = Integer.parseInt(Comandos.get(2));
@@ -441,7 +415,7 @@ void EjecutarComando(String Parameter):
 					case "east":
 						direction(2);
 						world.moveForward(steps,false);
-					case "west":
+					default:
 						direction(3);
 						world.moveForward(steps,false);
         		}
@@ -450,13 +424,7 @@ void EjecutarComando(String Parameter):
             	steps = Integer.parseInt(Comandos.get(1));
             	world.moveForward(steps,false);
         }
-		case "put":
-		case "get":
-		case "pop":
-		case "hop":
-		case "go":
 		case "assigt":
-			
 		case "jump":
 		case "leap":
 		case "turn":
