@@ -506,16 +506,17 @@ boolean ejecutarCondicion(String Parameter):
   switch (Condicion) {
         case "can":
         	if (condiciones.length > 2) {
-        	  	Comando= Comandos.get(1);
-        	  	switch (Condicion) {
+        	  	Comando= condiciones.get(1);
+        	  	switch (comando) {
         			case "walk":
-        				int orientacion = getFacing();
-        				int steps =Integer.parseInt(Comandos.get(2));
+        				
     					Point actual = getPosition();
     					int n =getN();
     					int x= actual.getX();
     					int y= actual.getY();
-        				if (condiciones.length ==3) { }
+        				if (condiciones.length ==2) {
+        				  	int orientacion = getFacing();
+        				  	int steps =Integer.parseInt(Comandos.get(1));
         					switch (orientacion) {
         						case 0:
         							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
@@ -527,8 +528,28 @@ boolean ejecutarCondicion(String Parameter):
 	        							else { funciona = false;}
         						case 2:
         						default:
-        				}
-        				boolean isBlocked(Point p)
+        				} }
+        				else if (condiciones.length ==3) {
+        				  	string direccion =Comandos.get(1);
+        				  	switch (direccion) {
+        				  	  case "north":
+        				  	  		int orientacion = 0;
+        				  	  
+        				  	  }
+        				  	int steps =Integer.parseInt(Comandos.get(2));
+        					switch (orientacion) {
+        						case 0:
+        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+        						case 1:
+        							if( (x - steps) < n && world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+        						case 2:
+        						default:
+        				} }
+        				
         			case "put":
 					case "get":
 					case "pop":
@@ -546,22 +567,24 @@ boolean ejecutarCondicion(String Parameter):
 					case "grab":
 					case "letgo":
 					case "nop":
-        			
+        			default:
 				}
   
 			}
 		case "facing":
+			direccion= condiciones.get(1);
+        	switch (direccion) {
+        	    case "north":
+        	    	funciona= world.facingNorth();
+				case "south":
+					funciona= world.facingSouth();
+				case "east":
+					funciona= world.facingEast();
+				default:
+					funciona= world.facingWest(); 
+       }
 }
 return result;}
 { }
-void ejecutarfacing():
-{
-  
- 	  if(direction.toLowerCase().equals("north")) { result = world.facingNorth(); }
-	  if(direction.toLowerCase().equals("south")) { result = world.facingSouth(); }
-	  if(direction.toLowerCase().equals("east")) { result = world.facingEast(); }
-	  if(direction.toLowerCase().equals("west")) { result = world.facingWest(); }
-	  return result;
-{
-}
+
 
