@@ -174,8 +174,8 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList VerifyWhile():
 	{
 	String condicion;
-	ArrayList bloque;
-	ArrayList resultado;
+	ArrayList<Object> bloque = new ArrayList<>();
+	ArrayList<Object> resultado = new ArrayList<>();
 	}
 	{
 	  <WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); }
@@ -224,20 +224,19 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList VerifyIf():
 	{
 	String condicion;
-	String condicion2;
-	ArrayList bloque;
-	ArrayList bloque2;
-	ArrayList resultado;
+	ArrayList<Object> bloque1 = new ArrayList<>();
+	ArrayList<Object> bloque2 = new ArrayList<>();
+	ArrayList<Object> resultado = new ArrayList<>();
 	}
 	{
-	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> {condicion2=VerifyCondicion();}{ bloque = VerifyBlock();})* {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(condicion2);resultado.add(bloque2); } )
+	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> { bloque = VerifyBlock();}) {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(bloque2); } )
 	  {return resultado; } 
 	}
 	ArrayList VerifyRepeat():
 	{
-	  Arraylist bloque;
+	  ArrayList<Object> bloque = new ArrayList<>();
 	  int x;
-	  Arraylist resultado;
+	  ArrayList<Object> resultado = new ArrayList<>();
 	}
 	{
 	  (<REPEAT> x=num() {bloque = VerifyBlock();} {resultado.add("Repeat");resultado.add(x);reultado.add(bloque);})
@@ -531,7 +530,7 @@ boolean ejecutarCondicion(String Parameter):
         			case "walk":
         				
     					Point actual = getPosition();
-    					int n =getN();
+    					int n = world.getN();
     					int x= actual.getX();
     					int y= actual.getY();
         				if (condiciones.length ==2) {
@@ -540,20 +539,20 @@ boolean ejecutarCondicion(String Parameter):
         					switch (orientacion) {
         								switch (orientacion) {
         						case 0:        							
-        							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 1:
-        							if((y + steps)>= 0 && (y + steps) < n && world.isBlocked(actual))
+        							if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 2:
-        							if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 
         						default:
-        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         				else if (condiciones.length ==3) {
@@ -571,20 +570,20 @@ boolean ejecutarCondicion(String Parameter):
         				  	int steps =Integer.parseInt(condiciones.get(3));
         					switch (orientacion) {
         						case 0:        							
-        							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 1:
-        							if((y + steps)>= 0 && (y + steps) < n && world.isBlocked(actual))
+        							if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 2:
-        							if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 
         						default:
-        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 	        				else if (condiciones.length ==3):
@@ -595,84 +594,84 @@ boolean ejecutarCondicion(String Parameter):
 								 	case "forward":
 								 	 	switch(mira):
 								 	 		case 0 :
-								 	 		 	if ((y-steps)>= 0 &&(y-steps)< n && word.isBlocked(actual))
+								 	 		 	if ((y-steps)>= 0 &&(y-steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((y + steps)>= 0 && (y + steps) < n && world.isBlocked(actual))
+        										if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+        										if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+			        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}
 				        			case "back":
 								 	 		case 0 :
-								 	 		 	if ((y + steps)>= 0 &&(y + steps)< n && word.isBlocked(actual))
+								 	 		 	if ((y + steps)>= 0 &&(y + steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((y - steps)>= 0 && (y - steps) < n && world.isBlocked(actual))
+        										if((y - steps)>= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+        										if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+			        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}
 				        			case "right":
 								 	 		case 0 :
-								 	 		 	if ((x + steps)>= 0 &&(x + steps)< n && word.isBlocked(actual))
+								 	 		 	if ((x + steps)>= 0 &&(x + steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((x - steps)>= 0 && (x - steps) < n && world.isBlocked(actual))
+        										if((x - steps)>= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((y + steps) >= 0 && (y + steps) < n && world.isBlocked(actual))
+        										if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+			        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
         				  	  	  }
 				        			default:
 								 	 		case 0 :
-								 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && word.isBlocked(actual))
+								 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((x + steps)>= 0 && (x + steps) < n && world.isBlocked(actual))
+        										if((x + steps)>= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+        										if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((y + steps) >= 0 && (y + steps) < n && world.isBlocked(actual))
+			        							if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
         				  	  	  }
 	        					}		
 
         			case "jump":
-    					int n =getN();
+    					int n =world.getN();
 						int x = condiciones.get(2)
 						int y = condiciones.get(3)
-						Point puntojump = Point.Point(x,y);
-    					if ((y < n) && (x < n) && world.isBlocked(puntojump))
+						Point puntojump = new Point(x,y);
+    					if ((y < n) && (x < n) && !world.isBlocked(puntojump))
  							{ funciona = true;}
 				        	else { funciona = false;}	
         			case "leap":
         				
     					Point actual = getPosition();
-    					int n =getN();
+    					int n =world.getN();
     					int x= actual.getX();
     					int y= actual.getY();
         				if (condiciones.length ==2) {
@@ -681,20 +680,20 @@ boolean ejecutarCondicion(String Parameter):
         					switch (orientacion) {
         								switch (orientacion) {
         						case 0:        							
-        							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 1:
-        							if((y + steps)>= 0 && (y + steps) < n && world.isBlocked(actual))
+        							if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 2:
-        							if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 
         						default:
-        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         				else if (condiciones.length ==3) {
@@ -712,20 +711,20 @@ boolean ejecutarCondicion(String Parameter):
         				  	int steps =Integer.parseInt(condiciones.get(3));
         					switch (orientacion) {
         						case 0:        							
-        							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 1:
-        							if((y + steps)>= 0 && (y + steps) < n && world.isBlocked(actual))
+        							if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         						case 2:
-        							if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 
         						default:
-        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 	        				else if (condiciones.length ==3):
@@ -736,67 +735,67 @@ boolean ejecutarCondicion(String Parameter):
 								 	case "forward":
 								 	 	switch(mira):
 								 	 		case 0 :
-								 	 		 	if ((y-steps)>= 0 &&(y-steps)< n && word.isBlocked(actual))
+								 	 		 	if ((y-steps)>= 0 &&(y-steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((y + steps)>= 0 && (y + steps) < n && world.isBlocked(actual))
+        										if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+        										if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+			        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}
 				        			case "back":
 								 	 		case 0 :
-								 	 		 	if ((y + steps)>= 0 &&(y + steps)< n && word.isBlocked(actual))
+								 	 		 	if ((y + steps)>= 0 &&(y + steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((y - steps)>= 0 && (y - steps) < n && world.isBlocked(actual))
+        										if((y - steps)>= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+        										if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((x + steps) >= 0 && (x + steps) < n && world.isBlocked(actual))
+			        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}
 				        			case "right":
 								 	 		case 0 :
-								 	 		 	if ((x + steps)>= 0 &&(x + steps)< n && word.isBlocked(actual))
+								 	 		 	if ((x + steps)>= 0 &&(x + steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((x - steps)>= 0 && (x - steps) < n && world.isBlocked(actual))
+        										if((x - steps)>= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((y + steps) >= 0 && (y + steps) < n && world.isBlocked(actual))
+        										if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+			        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
         				  	  	  }
 				        			default:
 								 	 		case 0 :
-								 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && word.isBlocked(actual))
+								 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && !word.isBlocked(actual))
 								 			case 1:
-        										if((x + steps)>= 0 && (x + steps) < n && world.isBlocked(actual))
+        										if((x + steps)>= 0 && (x + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        										else { funciona = false;}
         									case 2:
-        										if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
+        										if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
 
 			        						default:
-			        							if((y + steps) >= 0 && (y + steps) < n && world.isBlocked(actual))
+			        							if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
         				  	  	  }
@@ -806,18 +805,76 @@ boolean ejecutarCondicion(String Parameter):
 					case "turnto":
 						{funciona = true;}
         			case "put":
-        				{cosaabotar = condiciones.get(1)
+        				 cosaabotar = condiciones.get(1);
         				 Point actual = getPosition();
+        				 
         				 switch (cosaabotar):
         				 	case "balloon":
-        				 	 int cglobos = condiciones.get(2) 
-        				 	 boolean globos = world.containsBallons();
-								funciona = globos;					
+        				 	 int cglobos = condiciones.get(2); 
+        				 	 int globosdisp = world.getMyBalloons();
+        				 	  if (cglobos <= globosdisp);
+								{ funciona = true; }
+						     else { funciona = false;}
         				 	default:
-        				 	   int chips = world.chipExists();
+        				 	 int chipsdisp = world.getMyChips();
+        				 	 int cchips= condiciones.get(2);
+        				 	 boolean chippos = chipExists();
+        				 	 Point actual = getPosition();
+	    					 int y= actual.getY();
+							 int b= world.getObstacle();
+								
+							 if(chipsdisp <= cchips && chippos ==false && cchips < b && cchips < y )
+							 {funciona true;}
+							 else {funciona false;}
+					        				 	 
         			case "get":
+        				 case "balloon":
+	        				 int cglobos= condiciones.get(2);
+	        				 int globospos= world.countBalloons();
+	        				 if (cglobos <= globospos)
+	        				 {funciona true;}
+	        				 else {funciona false;}
+        				 default:
+	        				 int cchips= condiciones.get(2);
+	        				 int chipsdisp= world.chipExists();
+	        				 if(cchips == 1 && chipdisp)
+	        				 { funciona true;}
+	        				 else {funciona false;}
+	        				 
 					case "pop":
+					int popglobos = condiciones.get(2);
+					int globospos= world.countBalloons();
+					if(cglobos <= globospos)
+					{ funciona true}
+					else {funciona false}
+					
 					case "hop":
+					int steps = condiciones.get(2);
+					Point actual = getPosition();
+					int n = world.getN();
+					int x= actual.getX();
+					int y= actual.getY();
+					int orientacion = getFacing();
+					 switch(orientacion);
+					 	case 0:        							
+        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+        						case 1:
+        							if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+        						case 2:
+        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+
+        						default:
+        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+					
+		
 					case "go":
 					case "assigt":
 					case "drop":
