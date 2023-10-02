@@ -23,7 +23,6 @@ options
 PARSER_BEGIN(Robot)
 
 package uniandes.lym.robot.control;
-
 import uniandes.lym.robot.kernel.*;
 import uniandes.lym.robot.view.Console;
 import java.util.*;
@@ -473,7 +472,7 @@ boolean ejecutarCondicion(String Parameter):
   switch (Condicion) {
         case "can":
         	if (condiciones.length > 2) {
-        	  	Comando= condiciones.get(1);
+        	  	String Comando= condiciones.get(1);
         	  	switch (comando) {
         			case "walk":
         				
@@ -483,7 +482,7 @@ boolean ejecutarCondicion(String Parameter):
     					int y= actual.getY();
         				if (condiciones.length ==2) {
         				  	int orientacion = getFacing();
-        				  	int steps =Integer.parseInt(Comandos.get(1));
+        				  	int steps =Integer.parseInt(condiciones.get(2));
         					switch (orientacion) {
         								switch (orientacion) {
         						case 0:        							
@@ -504,7 +503,7 @@ boolean ejecutarCondicion(String Parameter):
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         				else if (condiciones.length ==3) {
-        				  	string direccion =Comandos.get(1);
+        				  	string direccion =condiciones.get(2);
         				  	switch (direccion) {
         				  	  case "north":
         				  	  		int orientacion = 0;
@@ -515,7 +514,7 @@ boolean ejecutarCondicion(String Parameter):
         				  	  case "west":
         				  	  	 	int orientacion =3;
         				  	  }
-        				  	int steps =Integer.parseInt(Comandos.get(2));
+        				  	int steps =Integer.parseInt(condiciones.get(3));
         					switch (orientacion) {
         						case 0:        							
         							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
@@ -535,8 +534,9 @@ boolean ejecutarCondicion(String Parameter):
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 	        				else if (condiciones.length ==3):
-	        					string direccion =Comandos.get(1);
+	        					string direccion =condiciones.get(1);
 	        					int mira = getFacing();
+	        					int steps =Integer.parseInt(condiciones.get(3));
         				  	  	switch(direccion) {
 								 	case "forward":
 								 	 	switch(mira):
@@ -609,8 +609,8 @@ boolean ejecutarCondicion(String Parameter):
 
         			case "jump":
     					int n =getN();
-						int x = Comandos.get(1)
-						int y = comandos.get(2)
+						int x = condiciones.get(2)
+						int y = condiciones.get(3)
 						Point puntojump = Point.Point(x,y);
     					if ((y < n) && (x < n) && world.isBlocked(puntojump))
  							{ funciona = true;}
@@ -623,7 +623,7 @@ boolean ejecutarCondicion(String Parameter):
     					int y= actual.getY();
         				if (condiciones.length ==2) {
         				  	int orientacion = getFacing();
-        				  	int steps =Integer.parseInt(Comandos.get(1));
+        				  	int steps =Integer.parseInt(condiciones.get(2));
         					switch (orientacion) {
         								switch (orientacion) {
         						case 0:        							
@@ -644,7 +644,7 @@ boolean ejecutarCondicion(String Parameter):
 	        							{ funciona = true;}
 	        							else { funciona = false;}
         				else if (condiciones.length ==3) {
-        				  	string direccion =Comandos.get(1);
+        				  	string direccion =condiciones.get(2);
         				  	switch (direccion) {
         				  	  case "north":
         				  	  		int orientacion = 0;
@@ -655,7 +655,7 @@ boolean ejecutarCondicion(String Parameter):
         				  	  case "west":
         				  	  	 	int orientacion =3;
         				  	  }
-        				  	int steps =Integer.parseInt(Comandos.get(2));
+        				  	int steps =Integer.parseInt(condiciones.get(3));
         					switch (orientacion) {
         						case 0:        							
         							if((y - steps) >= 0 && (y - steps) < n && world.isBlocked(actual))
@@ -675,8 +675,9 @@ boolean ejecutarCondicion(String Parameter):
 	        							{ funciona = true;}
 	        							else { funciona = false;}
 	        				else if (condiciones.length ==3):
-	        					string direccion =Comandos.get(1);
+	        					string direccion =condiciones.get(2);
 	        					int mira = getFacing();
+	        					int steps =Integer.parseInt(condiciones.get(3));
         				  	  	switch(direccion) {
 								 	case "forward":
 								 	 	switch(mira):
@@ -745,16 +746,26 @@ boolean ejecutarCondicion(String Parameter):
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
         				  	  	  }
-	        					}		
-
+	        					}
+	        		case "turn":
+	        			{funciona = true;}
+					case "turnto":
+						{funciona = true;}
         			case "put":
-					case "get":
+        				{cosaabotar = condiciones.get(1)
+        				 Point actual = getPosition();
+        				 switch (cosaabotar):
+        				 	case "balloon":
+        				 	 int cglobos = condiciones.get(2) 
+        				 	 boolean globos = world.containsBallons();
+								funciona = globos;					
+        				 	default:
+        				 	   int chips = world.chipExists();
+        			case "get":
 					case "pop":
 					case "hop":
 					case "go":
 					case "assigt":
-					case "turn":
-					case "turnto":
 					case "drop":
 					case "get":
 					case "grab":
