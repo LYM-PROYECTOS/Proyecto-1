@@ -158,7 +158,7 @@ TOKEN:  /* AUXILIARES*/
 		Arraylist x;
 	}
 	{
-		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro() { })
+		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro())
 	}
 	
 	ArrayList VerifyBlock():
@@ -195,8 +195,9 @@ TOKEN:  /* AUXILIARES*/
 		  String resultado;
 		}
 		{
-		    <FACING> { resultado =token.image;} "(" <NORTH>|<SOUTH>|<EAST>|<WEST> ")" 
-			{return resultado; }
+		    <FACING> "(" <NORTH>|<SOUTH>|<EAST>|<WEST> { resultado =token.image();}")" 
+			{ resultado = "facing,"+resultado;
+			  return resultado; }
 		}
 		
 		String can():
@@ -205,7 +206,8 @@ TOKEN:  /* AUXILIARES*/
 		}
 		{
 		  <CAN> "(" {resultado =VerifyComandos();} ")"
-		  {return resultado; }
+		  {	resultado = "can,"+resultado;
+		    return resultado; }
 		}
 
 		 
@@ -214,7 +216,8 @@ TOKEN:  /* AUXILIARES*/
 		  String resultado;
 		}
 		{ <NOT> "(" { VerifyComandos();} ")"
-		{return resultado; }}
+		 {	resultado = "not,"+resultado;
+		    return resultado; }}
 
 	ArrayList VerifyIf():
 	{
@@ -492,5 +495,14 @@ int VarORNum():
 	}
 
 //estructura
-void ejecutarcondicion():
+void ejecutarfacing():
+{
+  
+ 	  if(direction.toLowerCase().equals("north")) { result = world.facingNorth(); }
+	  if(direction.toLowerCase().equals("south")) { result = world.facingSouth(); }
+	  if(direction.toLowerCase().equals("east")) { result = world.facingEast(); }
+	  if(direction.toLowerCase().equals("west")) { result = world.facingWest(); }
+	  return result;
+{
+}
 
