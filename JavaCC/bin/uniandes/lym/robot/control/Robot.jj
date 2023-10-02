@@ -32,6 +32,7 @@ import java.io.*;
 import java.util.Vector;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.awt.Point;
 
 @SuppressWarnings("serial")
 public class Robot 
@@ -187,7 +188,9 @@ TOKEN:  /* AUXILIARES*/
 	   String resultado;
 	}
 	{
-	    facing() | can() | not()
+	    	(resultado =facing())
+	    | 	(resultado =can())
+	    | 	(resultado =not())
 		{return resultado;}
 	}
 	String facing():
@@ -215,7 +218,7 @@ TOKEN:  /* AUXILIARES*/
 		{
 		  String resultado;
 		}
-		{ <NOT> "(" { VerifyComandos();} ")"
+		{ <NOT> ":" (resultado= can())|resultado=facing())
 		 {	resultado = "not,"+resultado;
 		    return resultado; }}
 
@@ -495,6 +498,62 @@ int VarORNum():
 	}
 
 //estructura
+boolean ejecutarCondicion(String Parameter):
+{
+  boolean funciona;
+  ArrayList condiciones= Parameter.split(",");
+  String Condicion= condiciones.get(0);
+  switch (Condicion) {
+        case "can":
+        	if (condiciones.length > 2) {
+        	  	Comando= Comandos.get(1);
+        	  	switch (Condicion) {
+        			case "walk":
+        				int orientacion = getFacing();
+        				int steps =Integer.parseInt(Comandos.get(2));
+    					Point actual = getPosition();
+    					int n =getN();
+    					int x= actual.getX();
+    					int y= actual.getY();
+        				if (condiciones.length ==3) { }
+        					switch (orientacion) {
+        						case 0:
+        							if((x - steps) >= 0 && (x - steps) < n && world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+        						case 1:
+        							if( (x - steps) < n && world.isBlocked(actual))
+	        							{ funciona = true;}
+	        							else { funciona = false;}
+        						case 2:
+        						default:
+        				}
+        				boolean isBlocked(Point p)
+        			case "put":
+					case "get":
+					case "pop":
+					case "hop":
+					case "go":
+					case "assigt":
+						
+					case "jump":
+					case "walk":
+					case "leap":
+					case "turn":
+					case "turnto":
+					case "drop":
+					case "get":
+					case "grab":
+					case "letgo":
+					case "nop":
+        			
+				}
+  
+			}
+		case "facing":
+}
+return result;}
+{ }
 void ejecutarfacing():
 {
   
