@@ -174,8 +174,8 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList VerifyWhile():
 	{
 	String condicion;
-	ArrayList bloque;
-	ArrayList resultado;
+	ArrayList<Object> bloque = new ArrayList<>();
+	ArrayList<Object> resultado = new ArrayList<>();
 	}
 	{
 	  <WHILE > { condicion = VerifyCondicion();} { bloque = VerifyBlock();} {resultado.add("while");resultado.add(condicion);resultado.add(bloque); }
@@ -224,20 +224,19 @@ TOKEN:  /* AUXILIARES*/
 	ArrayList VerifyIf():
 	{
 	String condicion;
-	String condicion2;
-	ArrayList bloque;
-	ArrayList bloque2;
-	ArrayList resultado;
+	ArrayList<Object> bloque1 = new ArrayList<>();
+	ArrayList<Object> bloque2 = new ArrayList<>();
+	ArrayList<Object> resultado = new ArrayList<>();
 	}
 	{
-	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> {condicion2=VerifyCondicion();}{ bloque = VerifyBlock();})* {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(condicion2);resultado.add(bloque2); } )
+	  (<IF> { condicion = VerifyCondicion();} { bloque = VerifyBlock();} (<ELSE> { bloque = VerifyBlock();}) {resultado.add("If");resultado.add(condicion);resultado.add(bloque);resultado.add("else");resultado.add(bloque2); } )
 	  {return resultado; } 
 	}
 	ArrayList VerifyRepeat():
 	{
-	  Arraylist bloque;
+	  ArrayList<Object> bloque = new ArrayList<>();
 	  int x;
-	  Arraylist resultado;
+	  ArrayList<Object> resultado = new ArrayList<>();
 	}
 	{
 	  (<REPEAT> x=num() {bloque = VerifyBlock();} {resultado.add("Repeat");resultado.add(x);reultado.add(bloque);})
