@@ -155,22 +155,25 @@ TOKEN:  /* AUXILIARES*/
 	void VerifyPROC():
 	{	
 		String nameid;
-		Arraylist x;
+		ArrayList<Object> x = new ArrayList<>();
 	}
 	{
 		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro())
 	}
 	
-	ArrayList VerifyBlock():
+	void VerifyBlock(ArrayList PROC_Ejecucion):
 	{
-	  ArrayList resultado= new ArrayList();
+	 ArrayList<Object> resultado = new ArrayList<>();
+	 ArrayList<Object> areglo = new ArrayList<>();
+	 String str
 	}
 	{
 	 (
-	   "{" (VerifyVar()|VerifyCondicion()|VerifyWhile()| VerifyIf()|VerifyComandos()|VerifyRepeat()) "}"
+	   "{" ( { str = VerifyVar(); }| { str = VerifyCondicion(); }| {arreglo = VerifyWhile() ;}| {arreglo = VerifyIf() ;}| { str = VerifyComandos() ;}| {arreglo=VerifyRepeat() }) "}"
      )
+     {resultado.add("block"); resultado.add(arreglo);resultado.add(str)}
+     {return resultado;}
 	}
-	
 	ArrayList VerifyWhile():
 	{
 	String condicion;
@@ -449,17 +452,16 @@ int VarORNum():
 		{return total; }
 	}
 //BLOQUE
-	boolean bloque(Console sistema):
+	boolean bloque(ArrayListPROC_Ejecucion):
 	{
 		String instrucciones = "";
+		
 	}
 	{
-	  (
-		 "(" s=command() ")" {instrucciones = instrucciones + s;} (";" bloque())*	bloque())+
-	
-	  {
-		return True;
+	  {for(len PROC_Ejecucion)
+	   
 	  }
+	 
 	}
 
 //estructura
@@ -750,85 +752,51 @@ boolean ejecutarCondicion(String Parameter):
 	        			{funciona = true;}
 					case "turnto":
 						{funciona = true;}
-        			case "put":
-        				 cosaabotar = condiciones.get(1);
-        				 Point actual = getPosition();
-        				 
-        				 switch (cosaabotar):
-        				 	case "balloon":
-        				 	 int cglobos = condiciones.get(2); 
-        				 	 int globosdisp = world.getMyBalloons();
-        				 	  if (cglobos <= globosdisp);
-								{ funciona = true; }
-						     else { funciona = false;}
-        				 	default:
-        				 	 int chipsdisp = world.getMyChips();
-        				 	 int cchips= condiciones.get(2);
-        				 	 boolean chippos = chipExists();
-        				 	 Point actual = getPosition();
-	    					 int y= actual.getY();
-							 int b= world.getObstacle();
-								
-							 if(chipsdisp <= cchips && chippos ==false && cchips < b && cchips < y )
-							 {funciona true;}
-							 else {funciona false;}
-					        				 	 
+        							        				 	 
         			case "get":
-        				 case "balloon":
-	        				 int cglobos= condiciones.get(2);
-	        				 int globospos= world.countBalloons();
-	        				 if (cglobos <= globospos)
-	        				 {funciona true;}
-	        				 else {funciona false;}
-        				 default:
-	        				 int cchips= condiciones.get(2);
-	        				 int chipsdisp= world.chipExists();
-	        				 if(cchips == 1 && chipdisp)
-	        				 { funciona true;}
-	        				 else {funciona false;}
-	        				 
-					case "pop":
-					int popglobos = condiciones.get(2);
-					int globospos= world.countBalloons();
-					if(cglobos <= globospos)
-					{ funciona true}
-					else {funciona false}
-					
-					case "hop":
-					int steps = condiciones.get(2);
-					Point actual = getPosition();
-					int n = world.getN();
-					int x= actual.getX();
-					int y= actual.getY();
-					int orientacion = getFacing();
-					 switch(orientacion);
-					 	case 0:        							
-        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
-	        							{ funciona = true;}
-	        							else { funciona = false;}
-        						case 1:
-        							if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
-	        							{ funciona = true;}
-	        							else { funciona = false;}
-        						case 2:
-        							if((x + steps) >= 0 && (x + steps) < n && !world.isBlocked(actual))
-	        							{ funciona = true;}
-	        							else { funciona = false;}
+        			
+    				 int cchips= condiciones.get(2);
+    				 int chipsdisp= world.chipExists();
+    				 if(cchips == 1 && chipdisp)
+    				 { funciona true;}
+    				 else {funciona false;}
 
-        						default:
-        							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
-	        							{ funciona = true;}
-	        							else { funciona = false;}
-					
-		
-					case "go":
+				
 					case "assigt":
+					if (VAR.containsKey(llave))
+						{ funciona = true;}
+						{ funciona = false;}
+      
+						
 					case "drop":
-					case "get":
+						 cosaabotar = condiciones.get(1);
+        				 Point actual = getPosition();
+    		  		 	 int chipsdisp = world.getMyChips();
+    				 	 int cchips= condiciones.get(2);
+    				 	 boolean chippos = world.chipExists();
+    				 	 Point actual = getPosition();
+    				 	 int balloons= countBalloons();
+    					 int y= actual.getY();
+						 int b= world.getObstacle();
+						 if(chipsdisp <= cchips && chippos==false && cchips < b && cchips < y && balloons==0 )
+						 {funciona true;}
+						 else {funciona false; }
 					case "grab":
+						int popglobos = condiciones.get(2);
+						int globospos= world.countBalloons();
+						if(cglobos <= globospos)
+						{ funciona true;}
+						else {funciona false;}	
 					case "letgo":
+    				 	 int cglobos = condiciones.get(2);
+    				 	 boolean chippos = world.chipExists();
+    				 	 int globosdisp = world.getMyBalloons();
+    				 	 int b= world.getObstacle();
+							{ funciona = true; }
+    				 	  if (cglobos <= globosdisp && b==0 && chippos == false);
+					     else { funciona = false;}
 					case "nop":
-        			default:
+						{ funciona true; }	
 				}
   
 			}
@@ -842,10 +810,11 @@ boolean ejecutarCondicion(String Parameter):
 				case "east":
 					funciona= world.facingEast();
 				default:
-					funciona= world.facingWest(); 
+					funciona= world.facingWest();
+		case "not":
+			
        }
 }
-return result;}
-{ }
+
 
 
