@@ -39,15 +39,27 @@ public class Robot
 	private HashMap<String, Integer> VAR = new HashMap<String, Integer>();
 	private HashMap<String,  Arraylist> PROC_Parametro = new HashMap<String,  Arraylist>();
 	private HashMap<String, Arraylist> PROC_Ejecucion = new HashMap<String, Arraylist>();
+	private ArrayList<String>  comandos= new ArrayList();
 	private RobotWorldDec world;
-	
-	
+
+	comandos.add("jump");
+	comandos.add("walk");
+	comandos.add("leap");
+	comandos.add("turn");
+	comandos.add("turnto");
+	comandos.add("drop");
+	comandos.add("get");
+	comandos.add("grab");
+	comandos.add("nop");
+	comandos.add("letgo");
 	void setWorld(RobotWorld w) {
 		world = (RobotWorldDec) w;	
 	}
 
 	String salida=new String();
+
 }
+
 PARSER_END(Robot)
 
 SKIP:
@@ -113,7 +125,7 @@ TOKEN:  /* AUXILIARES*/
 		| < WEST: "west">
 		| < EAST: "east">
 }
-	//boolean command(uniandes.lym.robot.view.Console sistema) :
+//boolean command(uniandes.lym.robot.view.Console sistema):
 	
 	boolean command(Console sistema):
 	{	
@@ -142,6 +154,7 @@ TOKEN:  /* AUXILIARES*/
 
     	| <EOF> {return false;} 
 	}
+	
 	//DESARROLLLO PARSER Y SINTAXIS 
 	void VerifyVar():
 	{	
@@ -535,6 +548,44 @@ int VarORNum():
 		| (<ID> {name = token.image; if (VAR.containsKey(name.toLowerCase())) { total = VAR.get(name.toLowerCase()); }})
 		{return total; }
 	}
+//BLOQUE
+	boolean  EjecutarBlock(ArrayList bloque):
+	{
+		String instrucciones = "";
+		for (Object elemento : bloque) {
+            if (elemento instanceof String) {
+              	ArrayList condiciones=elemento.split(",");
+  				String primerelemento= elemento.get(0);
+  				primerelemeto = primerelemento.toLowerCase();
+  				if(comandos.contains(primerelemento))
+  				{   cadena = elemento.substring(1, Parameter.length());
+					EjecutarComando(cadena);
+  				  }
+  				
+            } else if (elemento instanceof ArrayList) {
+               String primerelemeto= elemento.get(0);
+               primerelemento = primerelemento.toLowerCase();
+               if (primerelemento.equals("while") )
+                   {  elemento.remove(0);
+                	EjecutarWhile(elemento); }
+               else if (primerelemento.equals("repeat"))
+                 {  elemento.remove(0);
+                	ejecutarrepeat(elemento); }
+               else if (primerelemento.equals("if"))
+   				 {  elemento.remove(0);
+                	ejecutarif(elemento); }
+               else if(PROC_Parametro.containsKey(primerelemento));
+               	{ elemento.remove(0);
+               	  ejecutarproc(elemento);
+               	  }
+               				
+            }
+        }
+	   
+	  
+	}
+	{	 
+	}
 
 //estructura
 boolean ejecutarCondicion(String Parameter):
@@ -892,46 +943,55 @@ boolean ejecutarCondicion(String Parameter):
 					default:
 						funciona= world.facingWest();
             	   }
-			}    	 
+           	case "not":
+      			boolean not = ejecutarnot(Parameter);
+      			funciona = not!
+           	
+		}
+ return funciona;  	 
 }
-{
-  
+{ 
 }
 
-boolean ejecutarnot():
+
+boolean ejecutarnot(String Parameter ):
 {
-	 boolean funciona;
-  ArrayList condiciones= Parameter.split(",");
-  String Condicion= condiciones.get(0);
-  boolean comando =
+  cadena = Parameter.substring(1, Parameter.length());
+  boolean resultado = ejecutarCondicion(cadena);
+  return resultado;  
 }
 {
-} 
+}
+
+ 
 void EjecutarWhile(ArrayList instrucciones):
 { String condicion= instrucciones.get(1);
   while(ejecutarCondicion(condicion)) {
    	 EjecutarBlock(instrucciones.get(2));
     }
 }
+void ejecutarrepeat(ArrayList instrucciones):
+{
+  int i = 0
+  while(i<=instrucciones.get(1))
+	{
+	  EjecutarBlock(instrucciones.get(2));
+	  i++
+	}
+}
 {
 }
 
-int numero(String dato): {
-  int total=0;
-  String llave = dato.toLowerCase();
-  	if (VAR.containsKey(llave)) {
-  	  VAR.get(llave);}
-  	else { 
-	try 
-	{
-		total = Integer.parseInt(dato);
-	} 
-	catch (NumberFormatException ee) 
-	{
-		throw new Error("Number out of bounds: "+token.image+" !!");
-	}
-	return total;
-	}
-   }
-   { }
+void ejecutarif(ArrayList instrucciones):
+{
+ 	String condicion = instrucciones.get(1);
+ 	boolean con = ejecutarCondicion(condicion);
+ 	if (con)
+ 	{
+ 	  EjecutarBlock(instrucciones.get(2);)	
+ 	  }
+ 	else {EjecutarBlock(instrucciones.get(4));}
+}
+{
+}
 
