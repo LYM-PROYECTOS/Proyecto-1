@@ -542,7 +542,6 @@ boolean ejecutarCondicion(String Parameter):
         				  	int orientacion = getFacing();
         				  	int steps =Integer.parseInt(condiciones.get(2));
         					switch (orientacion) {
-        								switch (orientacion) {
         						case 0:        							
         							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
@@ -560,6 +559,7 @@ boolean ejecutarCondicion(String Parameter):
         							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
+					 }
         				else if (condiciones.length ==3) {
         				  	string direccion =condiciones.get(2);
         				  	switch (direccion) {
@@ -571,7 +571,9 @@ boolean ejecutarCondicion(String Parameter):
         				  	  		int orientacion = 2;        				  	  
         				  	  case "west":
         				  	  	 	int orientacion =3;
-        				  	  }
+        				  	 	  }
+	        				  	 }
+	        					}        			 	
         				  	int steps =Integer.parseInt(condiciones.get(3));
         					switch (orientacion) {
         						case 0:        							
@@ -591,6 +593,7 @@ boolean ejecutarCondicion(String Parameter):
         							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
+	        					}
 	        				else if (condiciones.length ==3):
 	        					string direccion =condiciones.get(1);
 	        					int mira = getFacing();
@@ -600,6 +603,8 @@ boolean ejecutarCondicion(String Parameter):
 								 	 	switch(mira):
 								 	 		case 0 :
 								 	 		 	if ((y-steps)>= 0 &&(y-steps)< n && !word.isBlocked(actual))
+								 	 		 	{ funciona = true;}
+	        										else { funciona = false;}
 								 			case 1:
         										if((y + steps)>= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
@@ -645,7 +650,7 @@ boolean ejecutarCondicion(String Parameter):
 			        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
-        				  	  	  }
+        				  	  	  
 				        			default:
 								 	 		case 0 :
 								 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && !word.isBlocked(actual))
@@ -663,7 +668,8 @@ boolean ejecutarCondicion(String Parameter):
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
         				  	  	  }
-	        					}		
+	        				}
+				           } 		
 
         			case "jump":
     					int n =world.getN();
@@ -700,6 +706,8 @@ boolean ejecutarCondicion(String Parameter):
         							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
+	        					}
+	        			}
         				else if (condiciones.length ==3) {
         				  	string direccion =condiciones.get(2);
         				  	switch (direccion) {
@@ -731,8 +739,10 @@ boolean ejecutarCondicion(String Parameter):
         							if((x - steps) >= 0 && (x - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
 	        							else { funciona = false;}
-	        				else if (condiciones.length ==3):
-	        					string direccion =condiciones.get(2);
+	        					}
+	        			}	        						
+	        				else if (condiciones.length ==3): { 
+	        				   string direccion =condiciones.get(2);
 	        					int mira = getFacing();
 	        					int steps =Integer.parseInt(condiciones.get(3));
         				  	  	switch(direccion) {
@@ -780,45 +790,45 @@ boolean ejecutarCondicion(String Parameter):
         										if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
 	        									{ funciona = true;}
 	        									else { funciona = false;}
-
+		
 			        						default:
 			        							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 				        							{ funciona = true;}
 				        							else { funciona = false;}		
-        				  	  	  }
-				        			default:
-								 	 		case 0 :
-								 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && !word.isBlocked(actual))
-								 			case 1:
-        										if((x + steps)>= 0 && (x + steps) < n && !world.isBlocked(actual))
-	        									{ funciona = true;}
-	        										else { funciona = false;}
-        									case 2:
-        										if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
-	        									{ funciona = true;}
-	        									else { funciona = false;}
+        				  	  	  
+				        		default:
+						 	 		case 0 :
+						 	 		 	if ((x - steps)>= 0 &&(x - steps)< n && !word.isBlocked(actual))
+						 	 		 	{ funciona = true;}
+    										else { funciona = false;}
+						 			case 1:
+										if((x + steps)>= 0 && (x + steps) < n && !world.isBlocked(actual))
+    									{ funciona = true;}
+    										else { funciona = false;}
+									case 2:
+										if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
+    									{ funciona = true;}
+    									else { funciona = false;}
 
-			        						default:
-			        							if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
-				        							{ funciona = true;}
-				        							else { funciona = false;}		
-        				  	  	  }
+	        						default:
+	        							if((y + steps) >= 0 && (y + steps) < n && !world.isBlocked(actual))
+		        							{ funciona = true;}
+		        							else { funciona = false;}		
+				  	  	  			}
 	        					}
-	        		case "turn":
-	        			{funciona = true;}
+	        					
 					case "turnto":
 						{funciona = true;}
-        							        				 	 
-        			case "get":
-        			
+					case "turn":
+	        			{funciona = true;}		        				 	 
+        		    case"get":
     				 int cchips= condiciones.get(2);
     				 int chipsdisp= world.chipExists();
-    				 if(cchips == 1 && chipdisp)
-    				 { funciona true;}
-    				 else {funciona false;}
-
+    				 if(cchips == 1)
+    				 	{ funciona true;}
+ 					 	else {funciona false;}
 				
-					case "assigt":
+					case"assigt":
 					if (VAR.containsKey(llave))
 						{ funciona = true;} else
 						{ funciona = false;}
@@ -835,42 +845,53 @@ boolean ejecutarCondicion(String Parameter):
     					 int y= actual.getY();
 						 int b= world.getObstacle();
 						 if(chipsdisp <= cchips && chippos==false && cchips < b && cchips < y && balloons==0 )
-						 {funciona true;}
-						 else {funciona false; }
+						 	{funciona true;}
+						   else { funciona = false;}
 					case "grab":
 						int popglobos = condiciones.get(2);
 						int globospos= world.countBalloons();
 						if(cglobos <= globospos)
 						{ funciona true;}
-						else {funciona false;}	
+						 else {funciona false;}	
 					case "letgo":
     				 	 int cglobos = condiciones.get(2);
     				 	 boolean chippos = world.chipExists();
     				 	 int globosdisp = world.getMyBalloons();
     				 	 int b= world.getObstacle();
 							{ funciona = true; }
-    				 	  if (cglobos <= globosdisp && b==0 && chippos == false);
-					     else { funciona = false;}
+    				 	 if (cglobos <= globosdisp && b==0 && chippos == false)
+    				 	 	{funciona = true; }
+					        else { funciona = false;}
 					case "nop":
 						{ funciona true; }	
-				}
-  
-			}
-		case "facing":
-			direccion= condiciones.get(1);
-        	switch (direccion) {
-        	    case "north":
-        	    	funciona= world.facingNorth();
-				case "south":
-					funciona= world.facingSouth();
-				case "east":
-					funciona= world.facingEast();
-				default:
-					funciona= world.facingWest();
-		case "not":
-			
-       }
+
+			case"facing":
+					direccion= condiciones.get(1);
+	        		switch (direccion){
+	        	    case "north":
+	        	    	funciona= world.facingNorth();
+					case "south":
+						funciona= world.facingSouth();
+					case "east":
+						funciona= world.facingEast();
+					default:
+						funciona= world.facingWest();
+            	   }
+			}    	 
 }
+{
+  
+}
+
+boolean ejecutarnot()
+{
+	 boolean funciona;
+  ArrayList condiciones= Parameter.split(",");
+  String Condicion= condiciones.get(0);
+  boolean comando =
+}
+{
+} 
 void EjecutarWhile(ArrayList instrucciones):
 { String condicion= instrucciones.get(1);
   while(ejecutarCondicion(condicion)) {
