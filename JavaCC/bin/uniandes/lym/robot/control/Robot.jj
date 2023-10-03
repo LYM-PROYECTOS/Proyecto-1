@@ -37,8 +37,7 @@ import java.awt.Point;
 public class Robot 
 {
 	private HashMap<String, Integer> VAR = new HashMap<String, Integer>();
-	private HashMap<String, Integer> PROC_Parametro = new HashMap<String, Integer>();
-	private HashMap<String, Integer> PROC_Index = new HashMap<String, Integer>();
+	private HashMap<String,  Arraylist> PROC_Parametro = new HashMap<String,  Arraylist>();
 	private HashMap<String, Arraylist> PROC_Ejecucion = new HashMap<String, Arraylist>();
 	private RobotWorldDec world;
 	
@@ -149,16 +148,19 @@ TOKEN:  /* AUXILIARES*/
 		int x;
 	}
 	{
-		   <DEFVAR> <idname > { nameid = token.image; } x=num() { VAR.put(nameid, x); }
+		   <DEFVAR> <idname > { nameid = token.image; }{  x=num();VAR.put(nameid, x); }
 	}
 	
 	void VerifyPROC():
 	{	
 		String nameid;
 		ArrayList<Object> x = new ArrayList<>();
+		
+		
 	}
 	{
-		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro())
+		   (<DEFPROC> <idname > { nameid = token.image; } { x=parametrosPro();PROC_Parametro.put(nameid,x); }
+		   { x=VerifyBlock();PROC_Ejecucion.put(nameid,x);})
 	}
 	
 	ArrayList VerifyBlock():
@@ -869,6 +871,11 @@ boolean ejecutarCondicion(String Parameter):
 			
        }
 }
-
+void EjecutarWhile(ArrayList instrucciones):
+{ String condicion= instrucciones.get(1);
+  while(ejecutarCondicion(condicion)) {
+   	 EjecutarBlock(instrucciones.get(2));
+    }
+}
 
 
