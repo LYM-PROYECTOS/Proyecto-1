@@ -161,19 +161,20 @@ TOKEN:  /* AUXILIARES*/
 		   (<DEFPROC> <idname > { nameid = token.image; } x=parametrosPro())
 	}
 	
-	void VerifyBlock(ArrayList PROC_Ejecucion):
+	ArrayList VerifyBlock():
 	{
 	 ArrayList<Object> resultado = new ArrayList<>();
-	 ArrayList<Object> areglo = new ArrayList<>();
-	 String str
+	 ArrayList<Object> arreglo = new ArrayList<>();
+	 String str;
 	}
 	{
 	 (
-	   "{" ( { str = VerifyVar(); }| { str = VerifyCondicion(); }| {arreglo = VerifyWhile() ;}| {arreglo = VerifyIf() ;}| { str = VerifyComandos() ;}| {arreglo=VerifyRepeat() }) "}"
-     )
-     {resultado.add("block"); resultado.add(arreglo);resultado.add(str)}
-     {return resultado;}
+	   "{" (({arreglo = VerifyWhile() ;resultado.add(arreglo);}| {arreglo = VerifyIf();resultado.add(arreglo);}| { str = VerifyComandos() ;resultado.add(str);}| {arreglo=VerifyRepeat();resultado.add(arreglo);} | { arreglo = VerifyProc1();resultado.add(arreglo); })
+	   ("," {arreglo = VerifyWhile() ;resultado.add(arreglo);}| {arreglo = VerifyIf();resultado.add(arreglo);}| { str = VerifyComandos() ;resultado.add(str);}| {arreglo=VerifyRepeat();resultado.add(arreglo);} | { arreglo = VerifyProc1();resultado.add(arreglo); })*)*"}"
+     ){return resultado;}
 	}
+
+	
 	ArrayList VerifyWhile():
 	{
 	String condicion;
@@ -680,7 +681,6 @@ boolean ejecutarCondicion(String Parameter):
         				  	int orientacion = getFacing();
         				  	int steps =Integer.parseInt(condiciones.get(2));
         					switch (orientacion) {
-        								switch (orientacion) {
         						case 0:        							
         							if((y - steps) >= 0 && (y - steps) < n && !world.isBlocked(actual))
 	        							{ funciona = true;}
@@ -818,7 +818,7 @@ boolean ejecutarCondicion(String Parameter):
 				
 					case "assigt":
 					if (VAR.containsKey(llave))
-						{ funciona = true;}
+						{ funciona = true;} else
 						{ funciona = false;}
       
 						
