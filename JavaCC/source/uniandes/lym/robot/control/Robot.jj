@@ -507,16 +507,14 @@ int VarORNum():
 		{return total; }
 	}
 //BLOQUE
-	boolean bloque(ArrayListPROC_Ejecucion):
+	boolean bloque(ArrayList bloque):
 	{
 		String instrucciones = "";
-		
-	}
-	{
-	  {for(len PROC_Ejecucion)
+		for(len bloque )
 	   
-	  }
-	 
+	  
+	}
+	{	 
 	}
 
 //estructura
@@ -875,21 +873,27 @@ boolean ejecutarCondicion(String Parameter):
 					default:
 						funciona= world.facingWest();
             	   }
-			}    	 
+           	case "not":
+      			boolean not = ejecutarnot(Parameter);
+      			funciona = not!
+           	
+		}
+ return funciona;  	 
 }
-{
-  
+{ 
 }
 
-boolean ejecutarnot()
+
+boolean ejecutarnot(String Parameter ):
 {
-	 boolean funciona;
-  ArrayList condiciones= Parameter.split(",");
-  String Condicion= condiciones.get(0);
-  boolean comando =
+  cadena = Parameter.substring(1, Parameter.length());
+  boolean resultado = ejecutarCondicion(cadena);
+  return resultado;  
 }
 {
-} 
+}
+
+ 
 
 
 
