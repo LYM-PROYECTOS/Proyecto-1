@@ -893,19 +893,14 @@ boolean ejecutarnot(String Parameter ):
   return resultado;  
 }
 {
-<<<<<<< HEAD
 }
 
  
-
-=======
-} 
 void EjecutarWhile(ArrayList instrucciones):
 { String condicion= instrucciones.get(1);
   while(ejecutarCondicion(condicion)) {
    	 EjecutarBlock(instrucciones.get(2));
     }
 }
->>>>>>> 60f0061bd0a447a3e318d7377432ac9fea5fb645
 
 
